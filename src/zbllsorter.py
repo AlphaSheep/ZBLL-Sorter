@@ -54,7 +54,8 @@ cpllCaseNames = {'0123': '0',
                  '0231': 'L',
                  '0312': 'B'}
 
-generateImages = True
+generateImages = False
+generateSetImages = False
 
 ocllImageSize = 128
 collImageSize = 96
@@ -208,26 +209,28 @@ for k in keys:
     
     print(str(i)+'.\t', ocllName+' : '+collName+'\t', k,'---', (len(zblls[k])))
     
-    path = savePath+'images/'+collName+'/'
-    if not os.access(path,0):
-        os.mkdir(path)
+    path = 'images/'+collName+'/'
+    if not os.access(savePath+path.split('/')[0],0):
+        os.mkdir(savePath+path.split('/')[0])
+    if not os.access(savePath+path,0):
+        os.mkdir(savePath+path)
     filename = path+zbllName+'.png'
     
     if not ocllName in sortedZBLLdict.keys():
         sortedZBLLdict[ocllName] = {}
-        filename = savePath+"images/"+ocllName+'.png'        
-        if generateImages:
+        ocfilename = "images/"+ocllName+'.png'        
+        if generateSetImages:
             plot(k, stage="OCLL")
-            save(filename, size=ocllImageSize)
-        ocllImg[ocllName] = filename
+            save(savePath+ocfilename, size=ocllImageSize)
+        ocllImg[ocllName] = ocfilename
         
     if not collName in sortedZBLLdict[ocllName].keys():
         sortedZBLLdict[ocllName][collName] = []
-        filename = savePath+"images/"+collName+'.png'        
-        if generateImages:
+        cofilename = "images/"+collName+'.png'        
+        if generateSetImages:
             plot(k, stage="COLL")#, cornerCycle=True)
-            save(filename, size=collImageSize)
-        collImg[collName] = filename
+            save(savePath+cofilename, size=collImageSize)
+        collImg[collName] = cofilename
         
     if not ocllName in ocllProbs.keys():
         ocllProbs[ocllName] = len(zblls[k])
@@ -247,7 +250,7 @@ for k in keys:
     sortedZBLLdict[ocllName][collName].append((zbllName, filename, i))
     if generateImages:
         plot(k)#, edgeCycle=True)
-        save(filename, size=zbllImageSize)
+        save(savePath+filename, size=zbllImageSize)
     i+=1
 
 
@@ -291,6 +294,9 @@ td.sep {
 }
 """
 
+copyright = """
+Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
+"""
 
 i=0
 html = '<html><head><style>'+css+'</style></head><body><table>'
@@ -298,17 +304,19 @@ oclls = getList(sortedZBLLdict)
 for ocll in oclls:
     colls = getList(sortedZBLLdict[ocll])
     html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-    html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"%</td><td><table>"
+    html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"%</td><td><table>\n    "
     for coll in colls:
         html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-        html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+'%</td><td class="sep"> </td>'
+        html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+'%</td><td class="sep"> </td>\n        '
         for zbll in sortedZBLLdict[ocll][coll]:
             html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbll[1]+'" width="'+str(zbllImageSize)+'px" />'
-            html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"%</td>"
+            html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"%</td>\n        "
             i+=1
-        html+="</td></tr>"
+        html+="</td></tr>\n    "
     html += "</table></td></tr>"
-html += "</table></body></html>"
+html += "</table>"
+html += "<p>"+copyright+"</p></body></html>"
+
 
 
 with open(savePath+"index.html", 'w') as outFile:
