@@ -32,6 +32,7 @@ import pylab
 
 from imagegenerator import plot, draw, save
 
+savePath = '../'
 
 cornerTwistSet = [0, 1, 2]    # 0: oriented; 1: twisted clockwise; 2: twisted anticlockwise
 cornerPermSet = [0, 1, 2, 3]  # 0: UBL, 1: UBR, 2: UFR, 3: UFL
@@ -53,7 +54,7 @@ cpllCaseNames = {'0123': '0',
                  '0231': 'L',
                  '0312': 'B'}
 
-generateImages = False
+generateImages = True
 
 ocllImageSize = 128
 collImageSize = 96
@@ -207,9 +208,14 @@ for k in keys:
     
     print(str(i)+'.\t', ocllName+' : '+collName+'\t', k,'---', (len(zblls[k])))
     
+    path = savePath+'images/'+collName+'/'
+    if not os.access(path,0):
+        os.mkdir(path)
+    filename = path+zbllName+'.png'
+    
     if not ocllName in sortedZBLLdict.keys():
         sortedZBLLdict[ocllName] = {}
-        filename = "images/"+ocllName+'.png'        
+        filename = savePath+"images/"+ocllName+'.png'        
         if generateImages:
             plot(k, stage="OCLL")
             save(filename, size=ocllImageSize)
@@ -217,7 +223,7 @@ for k in keys:
         
     if not collName in sortedZBLLdict[ocllName].keys():
         sortedZBLLdict[ocllName][collName] = []
-        filename = "images/"+collName+'.png'        
+        filename = savePath+"images/"+collName+'.png'        
         if generateImages:
             plot(k, stage="COLL")#, cornerCycle=True)
             save(filename, size=collImageSize)
@@ -237,11 +243,6 @@ for k in keys:
         zbllProbs[zbllName] = len(zblls[k])
     else: 
         zbllProbs[zbllName] += len(zblls[k])    
-    
-    path = 'images/'+collName+'/'
-    if not os.access(path,0):
-        os.mkdir(path)
-    filename = path+zbllName+'.png'
     
     sortedZBLLdict[ocllName][collName].append((zbllName, filename, i))
     if generateImages:
@@ -310,5 +311,5 @@ for ocll in oclls:
 html += "</table></body></html>"
 
 
-with open("index.html", 'w') as outFile:
+with open(savePath+"index.html", 'w') as outFile:
     outFile.write(html)
