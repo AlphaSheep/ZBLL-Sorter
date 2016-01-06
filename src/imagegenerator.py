@@ -29,6 +29,7 @@ import copy
 from matplotlib.patches import Rectangle
 from scipy.constants.constants import neutron_mass
 
+
 # ColorScheme
 
 U = [1,1,0] # yellow
@@ -44,6 +45,7 @@ edgeBaseCols = [[U,B], [U,R], [U,F], [U,L]]
 
 edgeLocs = [(2.5,3.5), (3.5,2.5), (2.5,1.5), (1.5,2.5)]
 cornerLocs = [(1.5,3.5), (3.5,3.5), (3.5,1.5), (1.5,1.5)]
+
 
 def deStrCase(s):
     return [int(s[0]), int(s[1]), int(s[2]), int(s[3]), 
@@ -184,8 +186,6 @@ def main():
     plot('1212 0213 0132', stage='COLL', edgeCycle=False)
     #draw()
     save("test.png")
-
-
 
 
 if __name__ == '__main__':
