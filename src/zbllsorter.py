@@ -31,7 +31,7 @@ import os
 import pylab
 
 from imagegenerator import plot, draw, save
-from casegenerator import getZBLLCases, getUniqueCases
+from casegenerator import getUniqueZBLLCases
 
 #-------------------------
 # Constants
@@ -77,8 +77,7 @@ def getList(d):
 
 def main():
     
-    zblls = getZBLLCases()
-    zblls = getUniqueCases(zblls)
+    zblls = getUniqueZBLLCases()
     
     print(' Number of unique cases found:',len(zblls))
     
