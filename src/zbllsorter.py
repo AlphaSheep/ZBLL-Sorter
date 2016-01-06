@@ -31,13 +31,13 @@ import os
 import pylab
 
 from imagegenerator import plot, draw, save
+from casegenerator import getUniqueZBLLCases
+
+#-------------------------
+# Constants
+#-------------------------
 
 savePath = '../'
-
-cornerTwistSet = [0, 1, 2]    # 0: oriented; 1: twisted clockwise; 2: twisted anticlockwise
-cornerPermSet = [0, 1, 2, 3]  # 0: UBL, 1: UBR, 2: UFR, 3: UFL
-edgePermSet = [0, 1, 2, 3]    # 0: UB, 2: UR, 3: UF, 4: UL
-
 
 ocllCaseNames = {'0000': '0',
                  '0012': 'T',
@@ -54,270 +54,237 @@ cpllCaseNames = {'0123': '0',
                  '0231': 'L',
                  '0312': 'B'}
 
-generateImages = False
-generateSetImages = False
+globalGenerateImages = False
+globalGenerateSetImages = False
 
 ocllImageSize = 128
 collImageSize = 96
 zbllImageSize = 64
 
-def getOCLLcases():
-    cases = []
-    for ct1 in cornerTwistSet:
-        for ct2 in cornerTwistSet:
-            for ct3 in cornerTwistSet:
-                # Set last corner twist such that sum of corner twists is multiple of 3. 
-                ct4 = (6-ct1-ct2-ct3)%3 
-                cases.append([ct1, ct2, ct3, ct4])
-    return cases
+#-------------------------
+# Functions
+#-------------------------
 
-
-def getCPLLcases():
-    cases = []
-    for cp1 in cornerPermSet:
-        for cp2 in cornerPermSet:
-            if cp2==cp1:
-                continue
-            for cp3 in cornerPermSet:
-                if cp3==cp2 or cp3==cp1:
-                    continue
-                # The last corner must be the only remaining corner
-                cp4 = 6-cp1-cp2-cp3
-                cases.append([cp1, cp2, cp3, cp4])
-    return cases
-
-
-def getEPLLCases():
-    cases = []
-    for ep1 in edgePermSet:
-        for ep2 in edgePermSet:
-            if ep2==ep1:
-                continue
-            for ep3 in cornerPermSet:
-                if ep3==ep2 or ep3==ep1:
-                    continue
-                # The last edge must be the only remaining edge
-                ep4 = 6-ep1-ep2-ep3
-                cases.append([ep1, ep2, ep3, ep4])    
-    return cases
-    
-    
-def calcParity(perm):
-    # Count inversions
-    # That is, the minimum number of swaps required to correctly permute the pieces
-    p = perm[:]
-    inversions = 0
-    for i in range(3):
-        for j in range(i+1, 4):
-            if p[i]>p[j]:
-                #p[i], p[j] = p[j], p[i]
-                inversions += 1
-    return inversions
-                                
-
-def getZBLLCases():
-    cases = []
-    for ocll in getOCLLcases():
-        for cpll in getCPLLcases():
-            for epll in getEPLLCases():
-                parity = calcParity(cpll)+calcParity(epll)
-                if parity % 2==0:
-                    cases.append(ocll+cpll+epll)
-    return cases
-
-
-def rotateCase(case):
-    return [case[3],  case[0], case[1], case[2],
-            case[7],  case[4], case[5], case[6],
-            case[11], case[8], case[9], case[10]]
-
-
-def prerotateCase(case):
-    prerotated = case[:]
-    for i in range(4,12):
-        prerotated[i] = (prerotated[i]+1)%4
-    return prerotated
-        
-        
-def strCase(case):    
-    s = ''
-    for i in range(len(case)):
-        s += str(case[i])
-    return s[:4]+' '+s[4:8]+' '+s[8:]  
-    
-    
-def getAllRotations(case):
-    # Each case has 16 possible rotations - 4 possible AUFs before the case times 4 possible AUFs after the case.
-    # These 16 will not be unique in many cases.
-    cases = []
-    preRotation = case[:]        
-    for _ in range (4):
-        preRotation = prerotateCase(preRotation)
-        postRotation = preRotation[:]
-        for _ in range(4):
-            postRotation = rotateCase(postRotation)  
-            cases.append(postRotation)
-    return cases
-
-        
-def getUniqueCases(cases):
-    uniqueCases = {}
-    for case in cases:
-        unique = True
-        rotations = getAllRotations(case)
-        for rot in rotations:
-            if strCase(rot) in uniqueCases.keys():
-                unique = False
-                uniqueCases[strCase(rot)].append(strCase(case))
-                break
-        if unique:
-            uniqueCases[strCase(case)] = [strCase(case)]
-            
-    return uniqueCases
-            
 def getList(d):
     l = list(d.keys())
     l.sort()
     return l
 
 
-zblls = getZBLLCases()
-zblls = getUniqueCases(zblls)
-
-print(' Number of unique cases found:',len(zblls))
-
-keys = list(zblls.keys())
-keys.sort()
-
-ocllProbs = {}
-collProbs = {}
-zbllProbs = {}
-
-ocllImg = {}
-collImg = {}
-
-sortedZBLLdict = {}
-
-i=0
-
-for k in keys:
-    [ocll, cpll, epll] = k.split(' ')
+def sortCases(zblls):
+    keys = list(zblls.keys())
+    keys.sort()
     
-    ocllName = ocllCaseNames[ocll]
-    collName = ocllName+cpllCaseNames[cpll]
-    zbllName = collName+'-'+epll
+    sortedZBLLdict = {}
     
-    print(str(i)+'.\t', ocllName+' : '+collName+'\t', k,'---', (len(zblls[k])))
-    
-    path = 'images/'+collName+'/'
-    if not os.access(savePath+path.split('/')[0],0):
-        os.mkdir(savePath+path.split('/')[0])
-    if not os.access(savePath+path,0):
-        os.mkdir(savePath+path)
-    filename = path+zbllName+'.png'
-    
-    if not ocllName in sortedZBLLdict.keys():
-        sortedZBLLdict[ocllName] = {}
-        ocfilename = "images/"+ocllName+'.png'        
-        if generateSetImages:
-            plot(k, stage="OCLL")
-            save(savePath+ocfilename, size=ocllImageSize)
-        ocllImg[ocllName] = ocfilename
+    i=0    
+    for k in keys:
+        [ocll, cpll, epll] = k.split(' ')
         
-    if not collName in sortedZBLLdict[ocllName].keys():
-        sortedZBLLdict[ocllName][collName] = []
-        cofilename = "images/"+collName+'.png'        
-        if generateSetImages:
-            plot(k, stage="COLL")#, cornerCycle=True)
-            save(savePath+cofilename, size=collImageSize)
-        collImg[collName] = cofilename
+        ocllName = ocllCaseNames[ocll]
+        collName = ocllName+cpllCaseNames[cpll]
+        zbllName = collName+'-'+epll
         
-    if not ocllName in ocllProbs.keys():
-        ocllProbs[ocllName] = len(zblls[k])
-    else: 
-        ocllProbs[ocllName] += len(zblls[k])
+        print(str(i)+'.\tFound new case: ', ocllName+' : '+collName+'\t', k,'---', (len(zblls[k])))
         
-    if not collName in collProbs.keys():
-        collProbs[collName] = len(zblls[k])
-    else: 
-        collProbs[collName] += len(zblls[k])
         
-    if not zbllName in zbllProbs.keys():
-        zbllProbs[zbllName] = len(zblls[k])
-    else: 
-        zbllProbs[zbllName] += len(zblls[k])    
+        if not ocllName in sortedZBLLdict.keys():
+            sortedZBLLdict[ocllName] = {}
+            
+        if not collName in sortedZBLLdict[ocllName].keys():
+            sortedZBLLdict[ocllName][collName] = []            
+        
+        sortedZBLLdict[ocllName][collName].append((zbllName, k))        
+        i+=1    
+        
+    return sortedZBLLdict
+
+
+def getImages(sortedZBLLdict, generateImages=True, generateSetImages=True):
+
+    ocllImg = {}
+    collImg = {}
+    zbllImg = {}
+
+    i=0
+    for ocll in getList(sortedZBLLdict):
+        isFirstOCLL = True
+        for coll in getList(sortedZBLLdict[ocll]):
+            isFirstCOLL = True
+            for zbll in sortedZBLLdict[ocll][coll]:
+
+                zbllName = zbll[0]
+                
+                print(str(i)+'.\tSetting image for ',zbllName)
+
+                path = 'images/' + coll + '/'
+                if not os.access(savePath + path.split('/')[0], 0):
+                    os.mkdir(savePath + path.split('/')[0])
+                if not os.access(savePath + path, 0):
+                    os.mkdir(savePath + path)
+                zbllfilename = path + zbllName + '.png'
+                
+                # Generate OCLL image
+                if isFirstOCLL:
+                    ocllfilename = "images/" + ocll + '.png'
+                    if generateSetImages:
+                        plot(zbll[1], stage="OCLL")
+                        save(savePath + ocllfilename, size=ocllImageSize)
+                    ocllImg[ocll] = ocllfilename
+                    isFirstOCLL = False
+
+                # Generate COLL image
+                if isFirstCOLL:                    
+                    collfilename = "images/"+coll+'.png'
+                    if generateSetImages:         
+                        plot(zbll[1], stage="COLL")
+                        save(savePath+collfilename, size=collImageSize)
+                    collImg[coll] = collfilename
+                    isFirstCOLL = False
     
-    sortedZBLLdict[ocllName][collName].append((zbllName, filename, i))
-    if generateImages:
-        plot(k)#, edgeCycle=True)
-        save(savePath+filename, size=zbllImageSize)
-    i+=1
+                # Generate ZBLL image
+                if generateImages:
+                    plot(zbll[1])
+                    save(savePath+zbllfilename, size=zbllImageSize)
+                
+                zbllImg[zbllName] = zbllfilename
+                i=i+1
+                
+    return ocllImg, collImg, zbllImg
 
 
-if False:
-    print('\n\n\n')
-    l = list(ocllProbs.keys())
-    l.sort()
-    for p in l:
-        print(p,round(ocllProbs[p]/77.76,2))
-    print('\n\n\n')
+def getProbablities(zblls):
     
-    l = list(collProbs.keys())
-    l.sort()
-    for p in l:
-        print(p,round(collProbs[p]/77.76,2))
+    keys = list(zblls.keys())
+    keys.sort()
+    
+    ocllProbs = {}
+    collProbs = {}    
+    zbllProbs = {}        
+    
+    for k in keys:
+        [ocll, cpll, epll] = k.split(' ')
+        
+        ocllName = ocllCaseNames[ocll]
+        collName = ocllName+cpllCaseNames[cpll]
+        zbllName = collName+'-'+epll
+              
+        if not ocllName in ocllProbs.keys():
+            ocllProbs[ocllName] = len(zblls[k])
+        else: 
+            ocllProbs[ocllName] += len(zblls[k])
+            
+        if not collName in collProbs.keys():
+            collProbs[collName] = len(zblls[k])
+        else: 
+            collProbs[collName] += len(zblls[k])
+            
+        if not zbllName in zbllProbs.keys():
+            zbllProbs[zbllName] = len(zblls[k])
+        else: 
+            zbllProbs[zbllName] += len(zblls[k])            
+                
+    return ocllProbs, collProbs, zbllProbs
+    
+
+def probFractionString(cases, maxCases):
+    num = cases
+    denom = maxCases
+    i = num
+    while i>1:
+        while (num % i == 0) and (denom % i == 0):
+            num = int(num/i)
+            denom = int(denom/i)
+        i-=1
+    return str(num)+'/' +str(denom)
+        
+    
+#-------------------------
+# Main program
+#-------------------------
+
+def main():
+    
+    zblls = getUniqueZBLLCases()
+    
+    print(' Number of unique cases found:',len(zblls))
+    
+    sortedZBLLdict = sortCases(zblls)
+
+    ocllImg, collImg, zbllImg = getImages(sortedZBLLdict, generateImages=globalGenerateImages, generateSetImages=globalGenerateSetImages)    
+    ocllProbs, collProbs, zbllProbs = getProbablities(zblls) 
+
+    
+    if False:
+        print('\n\n\n')
+        l = list(ocllProbs.keys())
+        l.sort()
+        for p in l:
+            print(p,round(ocllProbs[p]/77.76,2), probFractionString(ocllProbs[p],7776))
+        print('\n\n\n')
+        
+        l = list(collProbs.keys())
+        l.sort()
+        for p in l:
+            print(p,round(collProbs[p]/77.76,2), probFractionString(collProbs[p],7776))
+    
+    
+    
+    
+    css = """
+    html, body {
+        font-family: Verdana;
+        font-size: 8pt;
+    }
+    table {
+        border-collapse: collapse;
+        border: 2px solid #000;
+    }
+    td {
+        border: 1px solid #000;
+    }
+    td {
+        min-width: 90px;
+        text-align: center;
+        padding: 5px;
+        font-size: 8pt;
+    }
+    td.sep {
+        border: 2px solid #000;
+        min-width: 2px;
+        width: 2px;
+        padding: 0;
+    }
+    """
+    
+    copyrightMsg = """
+    Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
+    """
+    
+    i=0
+    html = '<html><head><style>'+css+'</style></head><body><table>'
+    oclls = getList(sortedZBLLdict)
+    for ocll in oclls:
+        colls = getList(sortedZBLLdict[ocll])
+        html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
+        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+")</td><td><table>\n    "
+        for coll in colls:
+            html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
+            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')</td><td class="sep"> </td>\n        '
+            for zbll in sortedZBLLdict[ocll][coll]:
+                html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
+                html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")</td>\n        "
+                i+=1
+            html+="</td></tr>\n    "
+        html += "</table></td></tr>"
+    html += "</table>"
+    html += "<p>"+copyrightMsg+"</p></body></html>"
+    
+    
+    
+    with open(savePath+"index.html", 'w') as outFile:
+        outFile.write(html)
 
 
-css = """
-html, body {
-    font-family: Verdana;
-    font-size: 8pt;
-}
-table {
-    border-collapse: collapse;
-    border: 2px solid #000;
-}
-td {
-    border: 1px solid #000;
-}
-td {
-    min-width: 90px;
-    text-align: center;
-    padding: 5px;
-    font-size: 8pt;
-}
-td.sep {
-    border: 2px solid #000;
-    min-width: 2px;
-    width: 2px;
-    padding: 0;
-}
-"""
-
-copyright = """
-Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
-"""
-
-i=0
-html = '<html><head><style>'+css+'</style></head><body><table>'
-oclls = getList(sortedZBLLdict)
-for ocll in oclls:
-    colls = getList(sortedZBLLdict[ocll])
-    html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-    html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"%</td><td><table>\n    "
-    for coll in colls:
-        html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-        html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+'%</td><td class="sep"> </td>\n        '
-        for zbll in sortedZBLLdict[ocll][coll]:
-            html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbll[1]+'" width="'+str(zbllImageSize)+'px" />'
-            html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"%</td>\n        "
-            i+=1
-        html+="</td></tr>\n    "
-    html += "</table></td></tr>"
-html += "</table>"
-html += "<p>"+copyright+"</p></body></html>"
-
-
-
-with open(savePath+"index.html", 'w') as outFile:
-    outFile.write(html)
+if __name__ == '__main__':
+    main()
