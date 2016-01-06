@@ -50,4 +50,5 @@ coverage.xml
 docs/_build/
 
 # Program specific settings
-
+images/
+index.html
