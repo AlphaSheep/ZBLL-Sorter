@@ -23,9 +23,14 @@ Created on 06 Jan 2016
     
 '''
 
-def generateHTML(sortedZBLLdict,):
+from utilities import getList, probFractionString
+
+from constants import *
+
+
+def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg):
     
-    
+
     css = """
     html, body {
         font-family: Verdana;
@@ -52,32 +57,31 @@ def generateHTML(sortedZBLLdict,):
     }
     """
     
-    copyright = """
+    copyrightMsg = """
     Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
     """
-
-
+    
     i=0
     html = '<html><head><style>'+css+'</style></head><body><table>'
     oclls = getList(sortedZBLLdict)
     for ocll in oclls:
         colls = getList(sortedZBLLdict[ocll])
         html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"%</td><td><table>\n    "
+        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+")</td><td><table>\n    "
         for coll in colls:
             html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+'%</td><td class="sep"> </td>\n        '
+            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')</td><td class="sep"> </td>\n        '
             for zbll in sortedZBLLdict[ocll][coll]:
-                html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbll[1]+'" width="'+str(zbllImageSize)+'px" />'
-                html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"%</td>\n        "
+                html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
+                html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")</td>\n        "
                 i+=1
             html+="</td></tr>\n    "
         html += "</table></td></tr>"
     html += "</table>"
-    html += "<p>"+copyright+"</p></body></html>"
-
-
-
+    html += "<p>"+copyrightMsg+"</p></body></html>"
+    
+    
+    return html
 
 if __name__ == '__main__':
     pass
