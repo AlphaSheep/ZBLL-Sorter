@@ -30,9 +30,8 @@ Created on 05 Mar 2015
 
 import copy
 
-import cubeviewer
-
-
+from imagegenerator import plot, draw
+from casegenerator import strCase
 
 # Recognised move set:
 # U, U', U2, R, R', R2, F, F', F2, L, L', L2, B, B', B2, D, D', D2, 
@@ -119,6 +118,13 @@ movesDict = {
 
 ignoreSymbols = '[](){} '
 
+
+class AlgReadError(Exception):
+    pass
+    
+
+
+
 def checkAndSplitAlg(alg):
     strippedAlg = alg.split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
     splitAlg = strippedAlg.split(' ') # Separate by spaces
@@ -163,19 +169,28 @@ def getLLCase(case):
     llcase = case[0][:4] + case[1][:4] + case[3][:4]
     return llcase
     
-def caseToStr(case):
-    return str(case).replace(' ', '').replace('],[','], [')
     
 def getInverseCase(alg):
     return applyAlg([applyAlg(alg)])
 
+
+def getLLCaseSolvedByAlg(alg):
+    ok, alg = checkAndSplitAlg(rawAlg)
+    if not ok:
+        raise(AlgReadError)
+    inverse = getInverseCase(alg)
+    return strCase(getLLCase(inverse))
+        
+
+def getStage(alg):
+    pass
+
+
 def main():
     
     #rawAlg = "R U R' U' R' F R2 U R' U' R U R' U' F'"
-    rawAlg = "f R U R' U' f'"
-    #rawAlg = "R L R2 L2 R' L' U D U' D' U2 D2 F B F' B' F2 B2"
-    #rawAlg = "R U"
-    #rawAlg = "b b2"
+    #rawAlg = "R U R' U R U L' U R' U' L"
+    rawAlg = "R U R' U R U2 R'"
     ok, alg = checkAndSplitAlg(rawAlg)
     #print(alg)
     if not ok:
@@ -184,11 +199,16 @@ def main():
     #print('Alg: ',alg)
     result = applyAlg(alg)
     inverse = getInverseCase(alg)
-    print()
-    print(caseToStr(inverse)+', #')   
-
+    case = strCase(getLLCase(result))
+    inverse = strCase(getLLCase(inverse))
     
-    cubeviewer.draw(result, size=520)
+    print(inverse)   
+    print(case)   
+
+    plot(case, stage='ZBLL', edgeCycle=False)
+    draw()
+    plot(inverse, stage='ZBLL', edgeCycle=False)
+    draw()
     
     
 if __name__ == '__main__':
