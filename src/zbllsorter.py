@@ -159,8 +159,6 @@ def getProbablities(zblls):
     return ocllProbs, collProbs, zbllProbs
     
 
-        
-    
 #-------------------------
 # Main program
 #-------------------------
@@ -189,8 +187,6 @@ def main():
         l.sort()
         for p in l:
             print(p,round(collProbs[p]/77.76,2), probFractionString(collProbs[p],7776))
-    
-    
     
     
     html = generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg)

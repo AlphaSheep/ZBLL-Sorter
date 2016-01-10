@@ -26,8 +26,8 @@ Created on 06 Jan 2016
 
 savePath = '../'
 
-globalGenerateImages = True
-globalGenerateSetImages = True
+globalGenerateImages = False
+globalGenerateSetImages = False
 
 ocllImageSize = 128
 collImageSize = 96

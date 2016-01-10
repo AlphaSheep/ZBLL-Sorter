@@ -29,7 +29,6 @@ from constants import *
 
 
 def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg):
-    
 
     css = """
     html, body {
@@ -55,31 +54,97 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
         width: 2px;
         padding: 0;
     }
-    """
     
+    div.ocllblock {
+        position: absolute;
+        display: block;
+        text-align: center;
+        border: 2px solid #000;
+        width: 128px;
+        height: 879px; 
+        padding: 5px;
+        margin: 1px;
+    }
+    div.collblock {
+        position: absolute;
+        display: block;
+        text-align: center;
+        border: 1px solid #000;
+        width: 96px;    
+        height: 135px;  
+        padding: 5px;
+        margin: 1px;
+    }
+    div.zbllblock {
+        position: absolute;
+        display: block;
+        text-align: center;
+        border: 1px solid #000;
+        width: 90px;        
+        padding: 5px;
+        margin: 1px;
+    }
+    """
+
+    cssFileName = 'stylesheet.css'
+
     copyrightMsg = """
     Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
     """
     
     i=0
-    html = '<html><head><style>'+css+'</style></head><body><table>'
+    html = '<html><head><link rel="stylesheet" type="text/css" href="'+cssFileName+'"></head><body>'
+    
+    x = 0
+    y = 0
+    
     oclls = getList(sortedZBLLdict)
     for ocll in oclls:
+        html+='<div class="ocllblock" id="Case'+ocll+'">' + 'OCLL case: '+ocll+'<br/>'
+        html+='<img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
+        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+')'
+        html+='</div>'
+        
+        ocllx = x
+        oclly = y
+        y += 2
+        
         colls = getList(sortedZBLLdict[ocll])
-        html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+")</td><td><table>\n    "
         for coll in colls:
-            html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')</td><td class="sep"> </td>\n        '
+            
+            x= 145
+            
+            html+='<div class="collblock" id="Case'+coll+'">' + 'COLL case: '+coll+'<br/>'
+            html+='<img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
+            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')'
+            html+='</div>'
+            
+            css+='\n#Case'+coll+' {\n    left: '+str(x)+';\n    top: '+str(y)+';\n}'
+            x += 112
+            y += 6
+            
             for zbll in sortedZBLLdict[ocll][coll]:
-                html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
+                html+='<div class="zbllblock" id="CaseZBLL'+str(i)+'">' + 'ZBLL case #'+str(i)+'<br/>'+zbll[0]+'<br/>'
+                html+='<img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
                 html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")</td>\n        "
+                html+='</div>'
+
+                css+='\n#CaseZBLL'+str(i)+' {\n    left: '+str(x)+';\n    top: '+str(y)+';\n}'
+                x += 101
+
                 i+=1
-            html+="</td></tr>\n    "
-        html += "</table></td></tr>"
-    html += "</table>"
-    html += "<p>"+copyrightMsg+"</p></body></html>"
-    
+
+            y += 140
+        
+        css+='\n#Case'+ocll+' {\n    left: '+str(ocllx)+';\n    top: '+str(oclly)+';    height: '+str(y-oclly-12)+';\n}'
+        
+        y += 10
+        x = 0
+        
+    # Save CSS file
+    fCSS = open('../'+cssFileName, 'w')
+    fCSS.write(css)
+    fCSS.close()
     
     return html
 
