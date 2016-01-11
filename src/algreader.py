@@ -24,7 +24,7 @@ Created on 07 Jan 2016
 '''
 
 from constants import *
-from algtranslator import checkAndSplitAlg
+from algtranslator import checkAndSplitAlg, getZBLLcase, NotZBLLError, getBaseAlg
 
 
 def getAlgs(algFileName):
@@ -34,15 +34,30 @@ def getAlgs(algFileName):
         for line in algfile:
             i += 1
             rawalg = line.strip()
-            ok, alg = checkAndSplitAlg(rawalg)
+            if not rawalg: 
+                continue
+            ok, alg = checkAndSplitAlg(rawalg)        
             if not ok:
-                if rawalg:
-                    print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')
+                print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')                
             else:
+                try:
+                    getZBLLcase(alg)
+                except NotZBLLError:                    
+                    print('ERROR on line '+str(i)+': "'+getBaseAlg(rawalg)+'" does not result in a ZBLL case.')                
                 algs.append(alg)
     return algs
+                   
                     
-    
+def getCases(algs):
+    recogisedCases = []
+    for alg in algs:
+        try:
+            recogisedCases.append(getZBLLcase(alg))
+        except NotZBLLError:
+            print(alg)
+        
+    return recogisedCases
+        
     
 
 
@@ -52,7 +67,11 @@ def main():
     for a in algs:
         print(a)
     
+    print()
     
+    cases = getCases(algs)
+    for case in cases:
+        print(case)
 
 
 if __name__ == '__main__':

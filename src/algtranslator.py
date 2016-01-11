@@ -31,7 +31,7 @@ Created on 05 Mar 2015
 import copy
 
 from imagegenerator import plot, draw
-from casegenerator import strCase
+from casegenerator import strCase, getUniqueZBLLCases
 
 # Recognised move set:
 # U, U', U2, R, R', R2, F, F', F2, L, L', L2, B, B', B2, D, D', D2, 
@@ -122,11 +122,13 @@ ignoreSymbols = '()[]{} '
 class AlgReadError(Exception):
     pass
     
+class NotZBLLError(Exception):
+    pass
 
 
 
 def checkAndSplitAlg(alg):
-    strippedAlg = alg.strip().split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    strippedAlg = getBaseAlg(alg)
     splitAlg = strippedAlg.split(' ') # Separate by spaces
     moves = []
     for move in splitAlg:
@@ -137,6 +139,11 @@ def checkAndSplitAlg(alg):
             return False, 'Move not recognised: "'+move+'"'
         moves.append(movesDict[move])
     return True, moves
+    
+    
+def getBaseAlg(alg):
+    strippedAlg = alg.strip().split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    return strippedAlg
     
 
 def applyAlg(alg, startCase=solvedCube):
@@ -173,7 +180,7 @@ def applyInverseAlg(alg, startCase=solvedCube):
         move = [alg[i]]
         result = applyAlg([applyAlg(move)], result)
     return result
-
+0,0,0,0
 
 def getLLCase(case):
     llcase = case[0][:4] + case[1][:4] + case[3][:4]
@@ -185,8 +192,45 @@ def getInverseCase(alg):
     return inverse
 
 
-def getStage(alg):
-    pass
+def rotateToReferencePosition(case):
+    # Rotate if U centre not on top.
+    print(" Checking case: ",case)
+    if case[4][0]==0:
+        pass
+    elif case[4][1]==0:
+        case = applyAlg(movesDict["x"])
+    elif case[4][2]==0:
+        case = applyAlg(movesDict["z'"])
+    elif case[4][3]==0:
+        case = applyAlg(movesDict["x'"])
+    elif case[4][4]==0:
+        case = applyAlg(movesDict["z"])
+    elif case[4][5]==0:
+        case = applyAlg(movesDict["x2"])
+
+    # Rotate if F centre not on top.
+    if case[4][1]==1:
+        pass
+    elif case[4][2]==1:
+        case = applyAlg(movesDict["y"])
+    elif case[4][3]==1:
+        case = applyAlg(movesDict["y2"])
+    elif case[4][4]==1:
+        case = applyAlg(movesDict["y'"])
+    return case
+
+
+
+def getZBLLcase(alg):
+    zblls = getUniqueZBLLCases()
+    case = applyInverseAlg(alg)
+    case = rotateToReferencePosition(case)
+    llcase = strCase(getLLCase(case))
+    for zbll in zblls.keys():
+        if llcase in zblls[zbll]:
+            return zbll
+    raise NotZBLLError("Not an ZBLL case: "+llcase)
+    
 
 
 def main():
