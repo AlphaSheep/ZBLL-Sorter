@@ -167,22 +167,23 @@ def applyAlg(alg, startCase=solvedCube):
     return result
 
 
+def applyInverseAlg(alg, startCase=solvedCube):
+    result = copy.deepcopy(startCase) # don't accidentally change the startCase
+    for i in range(len(alg)-1,-1,-1):
+        move = [alg[i]]
+        result = applyAlg([applyAlg(move)], result)
+    return result
+
+
 def getLLCase(case):
     llcase = case[0][:4] + case[1][:4] + case[3][:4]
     return llcase
     
     
 def getInverseCase(alg):
-    return applyAlg([applyAlg(alg)])
+    inverse = applyInverseAlg(alg)
+    return inverse
 
-
-def getLLCaseSolvedByAlg(alg):
-    ok, alg = checkAndSplitAlg(rawAlg)
-    if not ok:
-        raise(AlgReadError)
-    inverse = getInverseCase(alg)
-    return strCase(getLLCase(inverse))
-        
 
 def getStage(alg):
     pass
@@ -193,24 +194,34 @@ def main():
     #rawAlg = "R U R' U' R' F R2 U R' U' R U R' U' F'"
     #rawAlg = "R U R' U R U L' U R' U' L"
     rawAlg = "R U R' U R U2 R'"
-    rawAlg = " // Solved"
+    #rawAlg = "U'"
+    #rawAlg = " // Solved"
     ok, alg = checkAndSplitAlg(rawAlg)
     #print(alg)
     if not ok:
         print('ERROR: ',alg)
         return
     #print('Alg: ',alg)
+    
     result = applyAlg(alg)
     inverse = getInverseCase(alg)
+    
     case = strCase(getLLCase(result))
     inverse = strCase(getLLCase(inverse))
     
     print(inverse)   
     print(case)   
 
+    import pylab
+    
+    pylab.Figure()
     plot(case, stage='ZBLL', edgeCycle=False)
-    draw()
+    pylab.get_current_fig_manager().window.wm_geometry("+1400+100")
+
+    pylab.Figure()
     plot(inverse, stage='ZBLL', edgeCycle=False)
+    pylab.get_current_fig_manager().window.wm_geometry("+1400+300")
+    
     draw()
     
     
