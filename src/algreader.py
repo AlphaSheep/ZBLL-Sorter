@@ -23,9 +23,37 @@ Created on 07 Jan 2016
     
 '''
 
+from constants import *
+from algtranslator import checkAndSplitAlg
 
 
+def getAlgs(algFileName):
+    algs = []
+    with open(algFileName) as algfile:
+        i = 0
+        for line in algfile:
+            i += 1
+            rawalg = line.strip()
+            ok, alg = checkAndSplitAlg(rawalg)
+            if not ok:
+                if rawalg:
+                    print('Line: '+str(i)+':/ERROR - '+alg+' in "'+rawalg+'"')
+            else:
+                algs.append(alg)
+    return algs
+                    
+        
+    
+
+
+
+def main():
+    algs = getAlgs(algFileName)
+    for a in algs:
+        print(a)
+    
+    
 
 
 if __name__ == '__main__':
-    pass
+    main()

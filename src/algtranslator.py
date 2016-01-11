@@ -116,7 +116,7 @@ movesDict = {
             }
 
 
-ignoreSymbols = '[](){} '
+ignoreSymbols = '()[]{} '
 
 
 class AlgReadError(Exception):
@@ -132,9 +132,9 @@ def checkAndSplitAlg(alg):
     for move in splitAlg:
         if not move:
             continue
-        move.strip(ignoreSymbols)
+        move = move.strip(ignoreSymbols)
         if not move in movesDict.keys():
-            return False, 'Move not recognised: '+move
+            return False, 'Move not recognised: "'+move+'"'
         moves.append(movesDict[move])
     return True, moves
     
