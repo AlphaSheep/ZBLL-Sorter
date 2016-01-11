@@ -1,0 +1,12 @@
+ // Solved :: ZBLL
+
+R U R' U' R U2 R' // Sune :: OCLL
+R' U' R U' R U2 R' // Back-sune :: OCLL
+R U2 R' U' R U' R' // Anti-Sune
+R U' L' U R' U' L // Niklas
+
+R U R' U R U L' U R' U' L // :: COLL
+F (R U R' U') (R U R' U') (R U R' U') F' // :: COLL
+(R U R' U' R U2 R') U2 (R' U' R U' R U2 R') // Two corner twist :: ZBLL
+R' F R U' R' U' R U R' F' R U R' U' R' F R F' R // Y-Perm conjugate :: ZBLL
+F2 R U' R' U' R U R' F' R U R' U' R' F R F2 // Y-Perm conjugate :: ZBLL

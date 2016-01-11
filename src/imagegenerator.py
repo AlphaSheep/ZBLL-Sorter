@@ -27,8 +27,8 @@ import pylab
 import copy
 
 from matplotlib.patches import Rectangle
-from scipy.constants.constants import neutron_mass
 
+<<<<<<< HEAD
 
 # ColorScheme
 
@@ -45,6 +45,9 @@ edgeBaseCols = [[U,B], [U,R], [U,F], [U,L]]
 
 edgeLocs = [(2.5,3.5), (3.5,2.5), (2.5,1.5), (1.5,2.5)]
 cornerLocs = [(1.5,3.5), (3.5,3.5), (3.5,1.5), (1.5,1.5)]
+=======
+from constants import *
+>>>>>>> develop
 
 
 def deStrCase(s):
