@@ -126,10 +126,12 @@ class AlgReadError(Exception):
 
 
 def checkAndSplitAlg(alg):
-    strippedAlg = alg.split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    strippedAlg = alg.strip().split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
     splitAlg = strippedAlg.split(' ') # Separate by spaces
     moves = []
     for move in splitAlg:
+        if not move:
+            continue
         move.strip(ignoreSymbols)
         if not move in movesDict.keys():
             return False, 'Move not recognised: '+move
@@ -191,6 +193,7 @@ def main():
     #rawAlg = "R U R' U' R' F R2 U R' U' R U R' U' F'"
     #rawAlg = "R U R' U R U L' U R' U' L"
     rawAlg = "R U R' U R U2 R'"
+    rawAlg = " // Solved"
     ok, alg = checkAndSplitAlg(rawAlg)
     #print(alg)
     if not ok:

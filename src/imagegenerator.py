@@ -28,6 +28,7 @@ import copy
 
 from matplotlib.patches import Rectangle
 
+
 from constants import *
 
 def deStrCase(s):
