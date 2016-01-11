@@ -159,7 +159,7 @@ def draw():
     
 def save(filename, size=200):
     
-    pylab.savefig(filename, figsize=(1,1), dpi=size)
+    pylab.savefig(filename, figsize=(1,1), dpi=size, transparent=True)
     pylab.close()
     
 

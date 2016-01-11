@@ -84,6 +84,9 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
         padding: 5px;
         margin: 1px;
     }
+    div.zbllblock:hover, div.collblock:hover, div.ocllblock:hover {
+        background: #ccf;
+    }
     """
 
     cssFileName = 'stylesheet.css'
