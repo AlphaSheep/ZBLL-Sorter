@@ -37,12 +37,12 @@ def getAlgs(algFileName):
             ok, alg = checkAndSplitAlg(rawalg)
             if not ok:
                 if rawalg:
-                    print('Line: '+str(i)+':/ERROR - '+alg+' in "'+rawalg+'"')
+                    print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')
             else:
                 algs.append(alg)
     return algs
                     
-        
+    
     
 
 
