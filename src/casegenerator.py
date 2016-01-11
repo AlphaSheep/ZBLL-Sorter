@@ -139,11 +139,17 @@ def getUniqueCases(cases):
             
     return uniqueCases
 
-           
+
 def getUniqueZBLLCases():
-    zblls = getZBLLCases()
-    zblls = getUniqueCases(zblls)
-    return zblls           
+    try:
+        return getUniqueZBLLCases.zblls
+    except AttributeError:
+        zblls = getZBLLCases()
+        zblls = getUniqueCases(zblls)
+        getUniqueZBLLCases.zblls = zblls
+        return zblls
+          
+     
 
 if __name__ == '__main__':
     pass
