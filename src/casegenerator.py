@@ -1,7 +1,7 @@
 '''
 Created on 06 Jan 2016
 
-    Copyright (c) 2014 Brendan Gray and Sylvermyst Technologies
+    Copyright (c) 2016 Brendan Gray and Sylvermyst Technologies
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,7 @@ Created on 06 Jan 2016
     
 '''
 
-
-cornerTwistSet = [0, 1, 2]    # 0: oriented; 1: twisted clockwise; 2: twisted anticlockwise
-cornerPermSet = [0, 1, 2, 3]  # 0: UBL, 1: UBR, 2: UFR, 3: UFL
-edgePermSet = [0, 1, 2, 3]    # 0: UB, 2: UR, 3: UF, 4: UL
-
+from constants import *
 
 def getOCLLcases():
     cases = []

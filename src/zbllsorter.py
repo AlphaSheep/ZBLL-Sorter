@@ -30,45 +30,17 @@ Created on 03 Mar 2015
 import os
 import pylab
 
-from imagegenerator import plot, draw, save
+from imagegenerator import plot, save
 from casegenerator import getUniqueZBLLCases
+from htmlgenerator import generateHTML
+from utilities import getList, probFractionString
 
-#-------------------------
-# Constants
-#-------------------------
-
-savePath = '../'
-
-ocllCaseNames = {'0000': '0',
-                 '0012': 'T',
-                 '0021': 'U',
-                 '0102': 'L',
-                 '0111': 'A',
-                 '0222': 'S',
-                 '1122': 'P',
-                 '1212': 'H'}
-cpllCaseNames = {'0123': '0',
-                 '0132': 'F',
-                 '0321': 'D',
-                 '0213': 'R',
-                 '0231': 'L',
-                 '0312': 'B'}
-
-globalGenerateImages = False
-globalGenerateSetImages = False
-
-ocllImageSize = 128
-collImageSize = 96
-zbllImageSize = 64
+from constants import *
 
 #-------------------------
 # Functions
 #-------------------------
 
-def getList(d):
-    l = list(d.keys())
-    l.sort()
-    return l
 
 
 def sortCases(zblls):
@@ -187,18 +159,6 @@ def getProbablities(zblls):
     return ocllProbs, collProbs, zbllProbs
     
 
-def probFractionString(cases, maxCases):
-    num = cases
-    denom = maxCases
-    i = num
-    while i>1:
-        while (num % i == 0) and (denom % i == 0):
-            num = int(num/i)
-            denom = int(denom/i)
-        i-=1
-    return str(num)+'/' +str(denom)
-        
-    
 #-------------------------
 # Main program
 #-------------------------
@@ -229,58 +189,7 @@ def main():
             print(p,round(collProbs[p]/77.76,2), probFractionString(collProbs[p],7776))
     
     
-    
-    
-    css = """
-    html, body {
-        font-family: Verdana;
-        font-size: 8pt;
-    }
-    table {
-        border-collapse: collapse;
-        border: 2px solid #000;
-    }
-    td {
-        border: 1px solid #000;
-    }
-    td {
-        min-width: 90px;
-        text-align: center;
-        padding: 5px;
-        font-size: 8pt;
-    }
-    td.sep {
-        border: 2px solid #000;
-        min-width: 2px;
-        width: 2px;
-        padding: 0;
-    }
-    """
-    
-    copyrightMsg = """
-    Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
-    """
-    
-    i=0
-    html = '<html><head><style>'+css+'</style></head><body><table>'
-    oclls = getList(sortedZBLLdict)
-    for ocll in oclls:
-        colls = getList(sortedZBLLdict[ocll])
-        html+="<tr><td>OCLL case: "+ocll+'<br/><img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-        html+="<br/>Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+")</td><td><table>\n    "
-        for coll in colls:
-            html+="<tr><td>COLL case: "+coll+'<br/><img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-            html+="<br/>Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')</td><td class="sep"> </td>\n        '
-            for zbll in sortedZBLLdict[ocll][coll]:
-                html+="<td>ZBLL case #"+str(i)+"<br/>"+zbll[0]+'<br/><img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
-                html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")</td>\n        "
-                i+=1
-            html+="</td></tr>\n    "
-        html += "</table></td></tr>"
-    html += "</table>"
-    html += "<p>"+copyrightMsg+"</p></body></html>"
-    
-    
+    html = generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg)
     
     with open(savePath+"index.html", 'w') as outFile:
         outFile.write(html)
