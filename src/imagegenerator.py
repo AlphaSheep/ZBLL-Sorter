@@ -28,26 +28,7 @@ import copy
 
 from matplotlib.patches import Rectangle
 
-<<<<<<< HEAD
-
-# ColorScheme
-
-U = [1,1,0] # yellow
-F = [0,0,1] # blue
-R = [0.9, 0, 0] # red
-B = [0,0.75,0] # green
-L = [1, 0.6, 0] # orange
-D = [1,1,1] # white
-neutralCol = None #[0.6, 0.6, 0.6]
-
-cornerBaseCols = [[U,L,B], [U,B,R], [U,R,F], [U,F,L]] # clockwise, starting on U
-edgeBaseCols = [[U,B], [U,R], [U,F], [U,L]]
-
-edgeLocs = [(2.5,3.5), (3.5,2.5), (2.5,1.5), (1.5,2.5)]
-cornerLocs = [(1.5,3.5), (3.5,3.5), (3.5,1.5), (1.5,1.5)]
-=======
 from constants import *
->>>>>>> develop
 
 
 def deStrCase(s):
