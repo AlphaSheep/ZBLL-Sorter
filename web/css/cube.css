@@ -1,0 +1,92 @@
+
+
+.cube-image {
+    position: relative;
+    height: 68px;
+    width: 68px;
+    left:0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.cube-image div {
+    position: absolute;
+    border: 1px solid black;
+    float: left;
+    background-color: white;
+}
+
+.cube-BUL, .cube-BU, .cube-BUR {
+    top: 0;
+    height: 6px;
+    width: 16px;
+    border-bottom-width: 2px;
+}
+
+.cube-FUL, .cube-FU, .cube-FUR {
+    top: 58px;
+    height: 6px;
+    width: 16px;
+    border-top-width: 2px;
+}
+
+.cube-LUB, .cube-LU, .cube-LUF {
+    left: 0;
+    height: 16px;
+    width: 6px;
+    border-top-width: 2px;
+}
+
+.cube-RUB, .cube-RU, .cube-RUF {
+    left: 58px;
+    height: 16px;
+    width: 6px;
+    border-top-width: 2px;
+}
+
+.cube-UBL, .cube-UL, .cube-UFL, .cube-UB, .cube-U, .cube-UF, .cube-UBR, .cube-UR, .cube-UFR {
+    height: 16px;
+    width: 16px;
+    z-index: 10;
+}
+
+.cube-BUL, .cube-UBL, .cube-UL, .cube-UFL, .cube-FUL {
+    left: 8px;
+}
+.cube-BU, .cube-UB, .cube-U, .cube-UF, .cube-FU {
+    left: 24px;
+}
+.cube-BUR, .cube-UBR, .cube-UR, .cube-UFR, .cube-FUR {
+    left: 40px;
+    background-color: lime;
+}
+
+.cube-LUB, .cube-UBL, .cube-UB, .cube-UBR, .cube-RUB {
+    top: 8px;
+}
+.cube-LU, .cube-UL, .cube-U, .cube-UR, .cube-RU {
+    top: 24px;
+}
+.cube-LUF, .cube-UFL, .cube-UF, .cube-UFR, .cube-RUF {
+    top: 40px;
+}
+
+
+.cube-image .cube-col-U {
+    background-color: yellow;
+}
+.cube-image .cube-col-F {
+    background-color: blue;
+}
+.cube-image .cube-col-R {
+    background-color: red;
+}
+.cube-image .cube-col-B {
+    background-color: lime;
+}
+.cube-image .cube-col-L {
+    background-color: darkorange;
+}
+.cube-image .cube-col-D {
+    background-color: white;
+}
