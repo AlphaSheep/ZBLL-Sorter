@@ -40,5 +40,15 @@ def probFractionString(cases, maxCases):
         i-=1
     return str(num)+'/' +str(denom)
 
+
+def getStringAfterSep(s, sep):
+    
+    firstPart = s.split(sep)[0]
+    n = len(firstPart)
+    if n <= len(s)+len(sep):
+        return ''
+    else:
+        return s[0:n+1]
+
 if __name__ == '__main__':
     pass

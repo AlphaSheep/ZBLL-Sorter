@@ -31,7 +31,9 @@ Created on 05 Mar 2015
 import copy
 
 from imagegenerator import plot, draw
-from casegenerator import strCase
+from casegenerator import strCase, getUniqueZBLLCases
+from utilities import getStringAfterSep
+from constants import ocllCaseNames, cpllCaseNames
 
 # Recognised move set:
 # U, U', U2, R, R', R2, F, F', F2, L, L', L2, B, B', B2, D, D', D2, 
@@ -116,25 +118,41 @@ movesDict = {
             }
 
 
-ignoreSymbols = '[](){} '
+ignoreSymbols = '()[]{} '
 
 
 class AlgReadError(Exception):
     pass
     
+class NotZBLLError(Exception):
+    pass
 
 
 
 def checkAndSplitAlg(alg):
-    strippedAlg = alg.split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    strippedAlg = getBaseAlg(alg)
     splitAlg = strippedAlg.split(' ') # Separate by spaces
     moves = []
     for move in splitAlg:
-        move.strip(ignoreSymbols)
+        if not move:
+            continue
+        move = move.strip(ignoreSymbols)
         if not move in movesDict.keys():
-            return False, 'Move not recognised: '+move
+            return False, 'Move not recognised: "'+move+'"'
         moves.append(movesDict[move])
     return True, moves
+    
+    
+def getBaseAlg(alg):
+    strippedAlg = alg.strip().split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    return strippedAlg
+    
+    
+def getComment(alg):
+    endPart = getStringAfterSep(alg, '//').strip()
+    comment = endPart.split('//')[0]
+    recog = getStringAfterSep(endPart, '::').strip()
+    return comment.strip(), recog.strip()
     
 
 def applyAlg(alg, startCase=solvedCube):
@@ -165,49 +183,104 @@ def applyAlg(alg, startCase=solvedCube):
     return result
 
 
+def applyInverseAlg(alg, startCase=solvedCube):
+    result = copy.deepcopy(startCase) # don't accidentally change the startCase
+    for i in range(len(alg)-1,-1,-1):
+        move = [alg[i]]
+        result = applyAlg([applyAlg(move)], result)
+    return result
+
 def getLLCase(case):
     llcase = case[0][:4] + case[1][:4] + case[3][:4]
     return llcase
     
     
 def getInverseCase(alg):
-    return applyAlg([applyAlg(alg)])
+    inverse = applyInverseAlg(alg)
+    return inverse
 
 
-def getLLCaseSolvedByAlg(alg):
-    ok, alg = checkAndSplitAlg(rawAlg)
-    if not ok:
-        raise(AlgReadError)
-    inverse = getInverseCase(alg)
-    return strCase(getLLCase(inverse))
+def rotateToReferencePosition(case):
+    # Rotate if U centre not on top.
+    if case[4][0]==0:
+        pass
+    elif case[4][1]==0:
+        case = applyAlg([movesDict["x"]], case)
+    elif case[4][2]==0:
+        case = applyAlg([movesDict["z'"]], case)
+    elif case[4][3]==0:
+        case = applyAlg([movesDict["x'"]], case)
+    elif case[4][4]==0:
+        case = applyAlg([movesDict["z"]], case)
+    elif case[4][5]==0:
+        case = applyAlg([movesDict["x2"]], case)
+
+    # Rotate if F centre not in front top.
+    if case[4][1]==1:
+        pass
+    elif case[4][2]==1:
+        case = applyAlg([movesDict["y"]], case)
+    elif case[4][3]==1:
+        case = applyAlg([movesDict["y2"]], case)
+    elif case[4][4]==1:
+        case = applyAlg([movesDict["y'"]], case)
+    return case
+
+
+
+def getZBLLcase(alg):
+    zblls = getUniqueZBLLCases()
+    case = applyInverseAlg(alg)
+    case = rotateToReferencePosition(case)
+    llcase = strCase(getLLCase(case))
+    for zbll in zblls.keys():
+        if llcase in zblls[zbll]:
+            return zbll
+    raise NotZBLLError("Not an ZBLL case: "+llcase)
+    
+
+def getZBLLCaseName(case):
+    [ocll, cpll, epll] = case.split(' ')
         
-
-def getStage(alg):
-    pass
-
+    ocllName = ocllCaseNames[ocll]
+    collName = ocllName+cpllCaseNames[cpll]
+    zbllName = collName+'-'+epll
+    
+    return zbllName
 
 def main():
     
     #rawAlg = "R U R' U' R' F R2 U R' U' R U R' U' F'"
     #rawAlg = "R U R' U R U L' U R' U' L"
     rawAlg = "R U R' U R U2 R'"
+    #rawAlg = "U'"
+    #rawAlg = " // Solved"
     ok, alg = checkAndSplitAlg(rawAlg)
     #print(alg)
     if not ok:
         print('ERROR: ',alg)
         return
     #print('Alg: ',alg)
+    
     result = applyAlg(alg)
     inverse = getInverseCase(alg)
+    
     case = strCase(getLLCase(result))
     inverse = strCase(getLLCase(inverse))
     
     print(inverse)   
     print(case)   
 
+    import pylab
+    
+    pylab.Figure()
     plot(case, stage='ZBLL', edgeCycle=False)
-    draw()
+    pylab.get_current_fig_manager().window.wm_geometry("+1400+100")
+
+    pylab.Figure()
     plot(inverse, stage='ZBLL', edgeCycle=False)
+    pylab.get_current_fig_manager().window.wm_geometry("+1400+300")
+    
     draw()
     
     

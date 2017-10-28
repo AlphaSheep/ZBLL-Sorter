@@ -24,58 +24,52 @@ Created on 06 Jan 2016
 '''
 
 from utilities import getList, probFractionString
+from algreader import readKnownCases
 
 from constants import *
+
 
 
 def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg):
 
     css = """
-    html, body {
+    body {
+        background-color: #000;
+        text-align: center;
+    }
+            
+    div.zbllblock {
+    
+        color: #ddd;
+        background: #444;
         font-family: Verdana;
+        font-size: 6pt;
+        position: absolute;
+        display: block;
+        text-align: center;
+        border: 1px solid #000;
+        width: 105px;   
+        height: 190px;     
+        padding: 2px;
+    }
+    
+    div.zbllalg {
+        padding: 8px 2px;
         font-size: 8pt;
     }
-    div.ocllblock {
-        position: absolute;
-        display: block;
-        text-align: center;
-        border: 2px solid #000;
-        width: 128px;
-        height: 879px; 
-        padding: 5px;
-        margin: 1px;
-    }
-    div.collblock {
-        position: absolute;
-        display: block;
-        text-align: center;
-        border: 1px solid #000;
-        width: 140px;    
-        height: 190px;  
-        padding: 5px;
-        margin: 1px;
-    }
-    div.zbllblock {
-        position: absolute;
-        display: block;
-        text-align: center;
-        border: 1px solid #000;
-        width: 145px;   
-        height: 190px;     
-        padding: 5px;
-        margin: 1px;
-    }
+    
     div.zbllblock:hover, div.collblock:hover, div.ocllblock:hover {
-        background: #ddf;
+        background: #446;
     }
     div.knownfull {
-        background: #dfd;
+        color: #fff;
+        background: #163;
     }
     div.knownpartial{
         background: #ffd;
     }
-    div.knownnotused {
-        background: #fdd;
+    div.notknown {
+        background: #222;
     }
     """
 
@@ -86,58 +80,62 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
     """
     
     i=0
-    html = '<html>\n    <head>\n        <link rel="stylesheet" type="text/css" href="'+cssFileName+'">\n    </head>\n    <body>\n\n'
+    html = '<html>\n    <head>\n'
+    html+= '        <link rel="stylesheet" type="text/css" href="'+cssFileName+'">\n'
+    html+= '        <link rel="stylesheet" type="text/css" href="web/css/cube.css">\n'
+    html+= '    </head>\n    <body>\n        <div class="zbllcontainer">\n\n'
     
     x = 0
-    y = 0
+    y = 60
     
     oclls = getList(sortedZBLLdict)
+    algs = readKnownCases()
+    
     for ocll in oclls:
-        html+='\n<div class="ocllblock" id="Case'+ocll+'">\n    ' + 'OCLL case: '+ocll+'<br/>\n    '
-        html+='<img src="'+ocllImg[ocll]+'" width="'+str(ocllImageSize)+'px" />'
-        html+="<br/>\n    Probability: "+"{:.2f}".format(ocllProbs[ocll]/77.76)+"% ("+probFractionString(ocllProbs[ocll], 7776)+')\n        '
-        html+='<br/><br/>        <br/><br/><i>        </i>\n'
-        html+='\n</div>\n'
         
-        ocllx = x
-        oclly = y
         y += 2
-        
+                
         colls = getList(sortedZBLLdict[ocll])
         for coll in colls:
             
-            x= 165
-            
-            html+='\n    <div class="collblock" id="Case'+coll+'">\n        ' + 'COLL case: '+coll+'<br/>\n        '
-            html+='<img src="'+collImg[coll]+'" width="'+str(collImageSize)+'px" />'
-            html+="<br/>\n        Probability: "+"{:.2f}".format(collProbs[coll]/77.76)+"% ("+probFractionString(collProbs[coll], 7776)+')\n        '
-            html+='<br/><br/>        <br/><br/><i>        </i>\n'
-            html+='\n    </div>\n'
+            x= 80#165
             
             css+='\n#Case'+coll+' {\n    left: '+str(x)+';\n    top: '+str(y)+';\n}'
-            x += 162
+            x += 0#162
             y += 0
             
             for zbll in sortedZBLLdict[ocll][coll]:
-                html+='    <div class="zbllblock" id="CaseZBLL'+str(i)+'">' + 'ZBLL case #'+str(i)+'<br/>'+zbll[0]+'<br/>\n        '
-                html+='<img src="'+zbllImg[zbll[0]]+'" width="'+str(zbllImageSize)+'px" />'
-                html+="<br/>Probability: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)+"% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")\n        "
-                html+='<br/><br/>        <br/><br/><i>        </i>\n'
+                if zbll[0] in algs.keys():
+                    classes = ' knownfull'
+                else:
+                    classes = ' notknown'
+                
+                html += '    <div class="zbllblock'+classes+'" id="CaseZBLL'+str(i)+'">'
+                html += 'ZBLL case #'+str(i)+'<br/>'+zbll[0]+'\n        '
+                html += "<br/>P: "+"{:.2f}".format(zbllProbs[zbll[0]]/77.76)
+                html += "% ("+probFractionString(zbllProbs[zbll[0]], 7776)+")\n <br/><br/>        "
+                html += '<div class="cube-image" data-case="'+zbll[0]+'"></div>'
+                
+                if zbll[0] in algs.keys():
+                    html+='<br/><div class="zbllalg">'+algs[zbll[0]]+'</div>\n'
+                else:
+                    html+='\n'
+                    
                 html+='    </div>\n'
 
                 css+='\n#CaseZBLL'+str(i)+' {\n    left: '+str(x)+';\n    top: '+str(y)+';\n}'
-                x += 156
+                x += 110
 
                 i+=1
 
             y += 201
         
-        css+='\n#Case'+ocll+' {\n    left: '+str(ocllx)+';\n    top: '+str(oclly)+';    height: '+str(y-oclly-12)+';\n}'
-        
-        y += 10
+        y += 60
         x = 0
         
-    html+= '\n\n    </body>\n</html>\n'
+    html+= '\n        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>\n'
+    html+= '\n        <script src="web/js/cube.js"></script>\n'
+    html+= '\n\n        </div>\n    </body>\n</html>\n'
     
     # Save CSS file
     fCSS = open('../'+cssFileName, 'w')

@@ -23,9 +23,66 @@ Created on 07 Jan 2016
     
 '''
 
+from constants import *
+from algtranslator import checkAndSplitAlg, getZBLLcase, NotZBLLError, getBaseAlg, getZBLLCaseName
 
 
+def getAlgs(algFileName):
+    algs = []
+    rawalgs = []
+    with open(algFileName) as algfile:
+        i = 0
+        for line in algfile:
+            i += 1
+            rawalg = line.strip()
+            if not rawalg or rawalg[0] == '#': 
+                continue
+            ok, alg = checkAndSplitAlg(rawalg)        
+            if not ok:
+                print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')                
+            else:
+                try:
+                    getZBLLcase(alg)
+                    algs.append(alg)
+                    rawalgs.append(rawalg)             
+                except NotZBLLError:                    
+                    print('ERROR on line '+str(i)+': "'+getBaseAlg(rawalg)+'" does not result in a ZBLL case.')                
+    return algs, rawalgs
+                   
+                    
+def getCases(algs):
+    recogisedCases = []
+    for alg in algs:
+        try:
+            recogisedCases.append(getZBLLCaseName(getZBLLcase(alg)))
+        except NotZBLLError:
+            print(alg)
+        
+    return recogisedCases        
+    
 
+def readKnownCases():
+    algs, rawalgs = getAlgs(algFileName)
+    print(len(algs), 'algorithms read\n')
+    cases = getCases(algs)
+    
+    algsDict = {}
+    for i in range(len(cases)):
+        if cases[i] in algsDict.keys():
+            print('Duplicate: ', algsDict[cases[i]], ' --and--', rawalgs[i])
+        algsDict[cases[i]] = rawalgs[i]
+    return algsDict
+    
+    
+
+
+def main():
+    algs = readKnownCases()
+    count = 0
+    for case in sorted(algs.keys()):
+        count += 1
+        print('{:.0f}.\t'.format(count), case, algs[case])
+        
 
 if __name__ == '__main__':
-    pass
+    main()

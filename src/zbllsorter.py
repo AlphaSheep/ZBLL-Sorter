@@ -32,7 +32,7 @@ import pylab
 
 from imagegenerator import plot, save
 from casegenerator import getUniqueZBLLCases
-from htmlgenerator import generateHTML
+from htmlgenerator2 import generateHTML
 from utilities import getList, probFractionString
 
 from constants import *
@@ -40,7 +40,6 @@ from constants import *
 #-------------------------
 # Functions
 #-------------------------
-
 
 
 def sortCases(zblls):

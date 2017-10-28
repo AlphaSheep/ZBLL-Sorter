@@ -1,0 +1,206 @@
+# Solved state
+    U
+
+# PLLs
+    # EPLL
+        R2 U R U R' U' R' U' R' U R' 
+        R U' R U R U R U' R' U' R2 
+        R' U' R2 U R U R' U' R U R U' R U' R'
+        R2 U2 R U2 R2 U2 R2 U2 R U2 R2 
+
+    # PLL Diagonal
+        F R U' R' U' R U R' F' R U R' U' R' F R F' 
+        R' U R U' x' U R U2 R' U' R U' R' U2 R U R' U' x
+        R U R' U L R U2 R' U' R U2 L' U R' U2 R U' R' 
+        x' U' R U L' U' R' U r2 U R' U' L' U R U' x' 
+        R' U' R U' R' L' U2 R U R' U2 L U' R U2 R' U R 
+
+    # PLL Adjacent
+        L R U2 R' U' R U2 L' U R' 
+        L' R' U2 R U R' U2 L U' R 
+        R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R 
+        R U2 R' U' R' F' R U2 R U2 R' F R U' R' 
+        l U' R D2 R' U R D2 R2 x 
+        R2 u R' U R' U' R u' R2 y' R' U R 
+        R' U' R y R2 u R' U R U' R u' R2 
+        R U R' U' R' F R2 U' R' U' R U R' F' 
+        R U R' y' R2 u' R U' R' U R' u R2 
+        l' U R' D2 R U' R' D2 R2 x' 
+        R' U2 R U2 R' F R U R' U' R' F' R2 
+        R2 u' R U' R U R' u R2 y R U' R' 
+
+
+# Anti-Sune 
+    # 2GLLs
+        R' U' R U' R D R' r' U2 r U2 R2 D' R2 
+        R U2 R' U' R U' R' 
+        R' U' R U' R' U2 R 
+
+    # Anti-Sune Adjacent
+        L' U R U' L U R' 
+
+# H 
+    # H 2GLLs
+        R U' R' U' R U R' U R U R' U' R U' R' U' R U R' U R U R'
+        R U R' U R U' R' U R U2 R' 
+        R' U' R U' R' U R U' R' U2 R
+        R' U2 R U R' U' R U R' U R 
+        R U2 R' U' R U' R' U' R' U' R U' R' U2 R
+        R' U2 R U R' U R U R U R' U R U2 R'
+        R U2 R' U' R U R' U' R U' R' 
+        R' U' R U' R' U2 R U R U2 R' U' R U' R'
+
+    # H Diagonals
+        F R U R' U' R U R' U' R U R' U' F' 
+        R U' L' U R' U' L R U' L' U R' U' L 
+
+    # H Adjacents
+        F R U' R' U R U2 R' U' R U R' U' F' 
+        R U R' U R U L' U R' U' L 
+
+# L
+    # L 2GLLs
+        R' U R U R' U R U2 R' U2 R' U' R U' R' U2 R U R 
+        R U2 R' U' R U R' U' R U R' U' R U' R' 
+        R U2 R' U' R U' R' U2 R U R' U R U2 R'
+        R' U' R U' R' U2 R U2 R' U2 R U R' U R
+        
+
+    # L Adjacents
+        x' M' U' R U L' U' R' U R 
+        R U2 R D r' U2 r D' R2 
+        R U2 R D R' U2 R D' R2 
+        x U R' U' L U R U' r' 
+        R' U2 R' D' r U2 r' D R2 
+        R' U2 R' D' R U2 R' D R2 
+        R U R' U' R B2 R' U2 R U2 R B2 R2
+        R' U' R U R' F2 R U2 R' U2 R' F2 R2
+        R U R' U' L' U2 R U2 R' U2 L
+        F R U' R' U' R U2 R' U' F'
+        R D' R U' R' D R U' R2 U R2 U R2
+        R' D R' U R D' R' U R2 U' R2 U' R2
+        L U' L' U2 R L U' L' U' R' U' R U' R'
+        L' U L U2 R' L' U L U R U R' U R
+        
+
+    # L Diagonals
+        R U R' L' U2 R U R' U2 L
+        R' U' R L U2 R' U' R U2 L'
+        
+        F R U R' U' R' F R2 U' R' U' R U R' F2
+        R' U' R U R' U' R' F R2 U' R' U' R U R' F' U R
+        R' U2 R' U2 R U2 R' F R U R' U' R' F' R2 U R
+        
+        
+
+# Pi
+    # Pi 2GLLs
+        R' U' R2 U R2 U R2 U' R2 U R2 U' R' U R U2 R' 
+        R' U2 R2 U R2 U R2 U2 R'
+        R U2 R2 U' R2 U' R2 U2 R 
+
+    # Pi Adjacents
+        L' U R U' L U R2 U' R U' R' U2 R 
+        R U R' U R U2 R' U' R U' L' U R' U' L 
+        L' U R U' L U' R' U' R U' R' 
+        F U R U' R' U R U2 R' U' R U R' F' 
+     
+    # Pi Diagonals
+        F R U R' U' R U' R' U' R U2 R' U' R U' R' U' R U R' F' 
+        R U2 R' U' F' R U2 R' U' R U' R' F R U' R' 
+
+# Sune
+    # Sune 2GLLs
+        R U R' U R' D' R r U2 r' U2 R2 D R2 
+        R U R' U R U2 R' 
+        R' U2 R U R' U R 
+
+    # Sune Adjacents
+        R U' L' U R' U' L 
+         
+    # Sune Diagonals
+
+# T
+    # T 2GLLs
+        R U R' U R U2 R' U2 R' U' R U' R' U2 R 
+        R U' R' U2 R U R' U2 R U R' U R U' R' 
+        R' U R U2 R' U' R U2 R' U' R U' R' U R
+        R' U2 R U R' U R2 U2 R' U' R U' R' 
+        R' U' R U' R' U R U' R U R2 U R2 U2 R'
+        R' U' R2 U R2 U R2 U2 R' U R' U R
+        R' U2 R U R' U R U' R' U' R U' R' U2 R
+        R U2 R' U' R U' R' U R U R' U R U2 R'
+        R U' R' U' R U2 R' U2 R U2 R' U2 R U R' U R U' R' 
+        R U R2 U' R2 U' R2 U2 R U' R U' R'
+        R U R' U R U' R' U R' U' R2 U' R2 U2 R
+        R U2 R' U' R U' R2 U2 R U R' U R
+
+    # T Adjacent Swap back corners
+        x' R U2 R D2 R' U2 R D2 R2 x
+        x R' U2 R' D2 R U2 R' D2 R2 x'
+        F R U R' U' R U' R' U' R U R' F' 
+
+    # T Adjacent Swap front corners
+        R U' R' U2 L R U' R' U L'
+        R' U R U2 L' R' U R U' L 
+        R' U' R2 U R' F' R U R' U' R' F R2 U' R' U' R' U R 
+        r U' r U2 R' F R U2 r2 F
+        R U R' U R U' R' U' L' U2 R U2 R' U2 L
+        R' U' R U' R' U R U L U2 R' U2 R U2 L'
+        L' U2 R U2 R' U2 L U R U R' U' R U' R'
+        L U2 R' U2 R U2 L' U' R' U' R U R' U R
+        R U R D R' U' R D' R' U2 R' U' R U' R'
+        R U2 R' U' R' F R2 U' R' U' R U R' F' R U' R'
+        F R U' R' U' R U2 R' U' F' R' U' R U' R' U2 R
+        R' U2 R U R' U R F U R U2 R' U R U R' F'
+
+    # T Adjacent Swap side corners
+        r' U' R U L U' R' U x 
+        r U R' U' L' U R U' x'
+        R2 B2 R' U2 R' U2 R B2 R' U R U' R'
+        R2 F2 R U2 R U2 R' F2 R U' R' U R
+        L' U2 R U2 R' U2 L U R U' R'
+        F U R U2 R' U R U R' F'
+        R2 U' R2 U' R2 U R' D' R U R' D R' 
+        R2 U R2 U R2 U' R D R' U' R D' R 
+        R U R' U R U L U L' R' U2 L U L'
+        R' U' R U' R' U' L' U' L R U2 L' U' L
+
+    # T Diagonals
+        R U' R2 D' r U2 r' D R2 U R' 
+        R' U R2 D r' U2 r D' R2 U' R
+        R' U' R U' R' U' R2 D r' U2 r D' R2 U' R
+        R U R' U R U R2 D' r U2 r' D R2 U R'
+
+# U
+    # U 2GLLs
+        R U2 R' U' R U' R' U2 R' U2 R U R' U R
+        R U R' U' R U' R' U2 R U' R' U2 R U R'
+        R' U' R U R' U R U2 R' U R U2 R' U' R
+        R U R' U R U2 R2 U' R U' R' U2 R
+        R U2 R2 U' R2 U' R' U R' U' R U R' U R
+        R' U' R U' R U2 R2 U' R2 U' R2 U R
+        R' U2 R U R' U R U R' U' R U' R' U2 R
+        R U2 R' U' R U' R' U' R U R' U R U2 R'
+        R U R' U' R U' R' U2 R U2 R' U2 R U2 R' U R U R'
+        R U R' U R' U2 R2 U R2 U R2 U' R'
+        R' U2 R2 U R2 U R U' R U R' U' R U' R'
+        R' U' R U' R' U2 R2 U R' U R U2 R'
+
+    # U Adjacents
+        F R U' R' U R U R' U R U' R' F' 
+        x' R2 D2 R' U2 R D2 R' U2 R' x
+        x R2 D2 R U2 R' D2 R U2 R x'
+        F2 R U' R' U' R U R' F' R U R' U' R' F R F2 
+        R' F R U' R' U' R U R' F' R U R' U' R' F R F' R 
+        R U' R' U R U' r B r' U B2 R B2 R2 
+        R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R' U2 R 
+        R2 D R' U2 R D' R' U2 R' 
+        R2 D' r U2 r' D R U2 R 
+        R2 D r' U2 r D' R' U2 R' 
+         R2 D' R U2 R' D R U2 R 
+
+    # U Diagonals
+        R U2 R' U' L' U2 R U R' U2 L 
+
+

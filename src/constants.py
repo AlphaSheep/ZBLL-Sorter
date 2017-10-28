@@ -26,6 +26,9 @@ Created on 06 Jan 2016
 
 savePath = '../'
 
+algFileName = '../algorithms2.txt'
+
+
 globalGenerateImages = False
 globalGenerateSetImages = False
 
