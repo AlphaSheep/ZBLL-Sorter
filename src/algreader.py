@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 '''
 Created on 07 Jan 2016
 
@@ -24,7 +25,7 @@ Created on 07 Jan 2016
 '''
 
 from constants import *
-from algtranslator import checkAndSplitAlg, getZBLLcase, NotZBLLError, getBaseAlg, getZBLLCaseName
+from algtranslator import checkAndSplitAlg, getZBLLcase, getInitialAUF, NotZBLLError, getBaseAlg, getZBLLCaseName
 
 
 def getAlgs(algFileName):
@@ -42,9 +43,12 @@ def getAlgs(algFileName):
                 print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')                
             else:
                 try:
-                    getZBLLcase(alg)
+                    case = getZBLLcase(alg)
+                    auf = getInitialAUF(alg)
                     algs.append(alg)
-                    rawalgs.append(rawalg)             
+                    rawalgs.append(auf + rawalg)
+                    print(auf + rawalg)
+                    
                 except NotZBLLError:                    
                     print('ERROR on line '+str(i)+': "'+getBaseAlg(rawalg)+'" does not result in a ZBLL case.')                
     return algs, rawalgs
@@ -74,7 +78,6 @@ def readKnownCases():
     return algsDict
     
     
-
 
 def main():
     algs = readKnownCases()
