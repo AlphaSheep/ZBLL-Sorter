@@ -2,10 +2,10 @@
 var cubeImages = $('.cube-image');
 
 var pieces = [      'BUL','BU','BUR',
-          'LUB','UBL','UB','UBR','RUB',
-          'LU', 'UL', 'U', 'UR', 'RU',
-          'LUF','UFL','UF','UFR','RUF',
-                'FUL','FU','FUR']
+              'LUB','UBL','UB','UBR','RUB',
+              'LU', 'UL', 'U', 'UR', 'RU',
+              'LUF','UFL','UF','UFR','RUF',
+                    'FUL','FU','FUR']
 
 var ocll = {
     '0': [0,0,0,0],
