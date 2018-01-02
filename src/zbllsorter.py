@@ -158,6 +158,17 @@ def getProbablities(zblls):
     return ocllProbs, collProbs, zbllProbs
     
 
+def dumpZbllJson(zbllDict):
+    zbllNameDict = {}
+    for ocll in zbllDict.keys():
+        zbllNameDict[ocll] = {}
+        for coll in zbllDict[ocll].keys():
+            zbllNameDict[ocll][coll] = []
+            for zbll in zbllDict[ocll][coll]:
+                zbllNameDict[ocll][coll].append(zbll[0])
+    with open(savePath+"zblls.json",'w') as zblljson:
+        json.dump(zbllNameDict, zblljson, indent=2)
+
 #-------------------------
 # Main program
 #-------------------------
@@ -192,6 +203,7 @@ def main():
     
     with open(savePath+"index.html", 'w') as outFile:
         outFile.write(html)
+    dumpZbllJson(sortedZBLLdict)
 
 
 if __name__ == '__main__':

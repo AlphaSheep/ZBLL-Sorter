@@ -1,5 +1,4 @@
-/src/uploadZBLLs.sh
-/stylesheet.css
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -57,3 +56,6 @@ docs/_build/
 # Program specific settings
 images/
 index.html
+zblls.json
+/src/uploadZBLLs.sh
+/stylesheet.css
