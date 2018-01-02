@@ -20,11 +20,11 @@ Created on 06 Jan 2016
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-    
+
 '''
 
 
-savePath = '../'
+savePath = '../web/'
 
 algFileName = '../algorithms2.txt'
 
@@ -51,8 +51,6 @@ cpllCaseNames = {'0123': '0',
                  '0213': 'R',
                  '0231': 'L',
                  '0312': 'B'}
-
-
 
 cornerTwistSet = [0, 1, 2]    # 0: oriented; 1: twisted clockwise; 2: twisted anticlockwise
 cornerPermSet = [0, 1, 2, 3]  # 0: UBL, 1: UBR, 2: UFR, 3: UFL

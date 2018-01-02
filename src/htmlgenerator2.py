@@ -81,10 +81,10 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
     
     i=0
     html = '<html>\n    <head>\n'
-    html+= '        <link rel="stylesheet" type="text/css" href="'+cssFileName+'">\n'
-    html+= '        <link rel="stylesheet" type="text/css" href="web/css/cube.css">\n'
-    html+= '    </head>\n    <body>\n        <div class="zbllcontainer">\n\n'
-    
+    html+= '        <link rel="stylesheet" type="text/css" href="css/'+cssFileName+'">\n'
+    html+= '        <link rel="stylesheet" type="text/css" href="css/cube.css">\n'
+    html+= '    </head>\n    <body>\n'
+
     x = 0
     y = 60
     
@@ -134,14 +134,14 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
         x = 0
         
     html+= '\n        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>\n'
-    html+= '\n        <script src="web/js/cube.js"></script>\n'
+    html+= '\n        <script src="js/cube.js"></script>\n'
     html+= '\n\n        </div>\n    </body>\n</html>\n'
-    
+
     # Save CSS file
-    fCSS = open('../'+cssFileName, 'w')
+    fCSS = open(cssPath, 'w')
     fCSS.write(css)
     fCSS.close()
-    
+
     return html
 
 if __name__ == '__main__':
