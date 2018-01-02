@@ -12,7 +12,7 @@
         F R U' R' U' R U R' F' R U R' U' R' F R F' 
         R' U R U' x' U R U2 R' U' R U' R' U2 R U R' U' x
         R U R' U L R U2 R' U' R U2 L' U R' U2 R U' R' 
-        x' U' R U L' U' R' U r2 U R' U' L' U R U' x' 
+        R U R' U R' U' R F' R U R' U' R' F R2 U' R2 U R
         R' U' R U' R' L' U2 R U R' U2 L U' R U2 R' U R 
 
     # PLL Adjacent
@@ -32,7 +32,7 @@
 
 # Anti-Sune 
     # 2GLLs
-        R' U' R U' R D R' r' U2 r U2 R2 D' R2 
+        R U' R U R' U R U2 R' U' R' U' R U' R' U R U' R'
         R U2 R' U' R U' R' 
         R' U' R U' R' U2 R 
 
@@ -53,6 +53,14 @@
     # H Diagonals
         F R U R' U' R U R' U' R U R' U' F' 
         R U' L' U R' U' L R U' L' U R' U' L 
+        
+        F R' U R U2 R2 U' R U2 R' U' R2 U F'
+        F U' R2 U R U2 R' U R2 U2 R' U' R F'
+        R' U' R U' R' U2 R U R' U' R L U2 R' U' R U2 L'
+        R U R' U R U2 R' U' R U R' L' U2 R U R' U2 L
+        
+        R U R' U R U2 R2 U2 L U' R U L' U R' U R
+        R' U' R U' R' U2 R2 U2 L' U R' U' L U' R U' R'
 
     # H Adjacents
         F R U' R' U R U2 R' U' R U R' U' F' 
@@ -65,6 +73,16 @@
         R U2 R' U' R U' R' U2 R U R' U R U2 R'
         R' U' R U' R' U2 R U2 R' U2 R U R' U R
         
+        R' U2 R U R' U R U' R U2 R' U' R U' R'
+        R U2 R' U' R U' R' U R' U2 R U R' U R
+        R U R' U R U2 R' U R' U' R U' R' U2 R
+        R' U' R U' R' U2 R U' R U R' U R U2 R'
+        
+        R U2 R' U2 R' U2 R' U R U' R U2 R2 U2 R'
+        R' U2 R U2 R U2 R U' R' U R' U2 R2 U2 R
+        R U2 R2 U2 R' U R' U' R U2 R U2 R U2 R'
+        R' U2 R2 U2 R U' R U R' U2 R' U2 R' U2 R
+        
 
     # L Adjacents
         x' M' U' R U L' U' R' U R 
@@ -72,15 +90,22 @@
         R U2 R D R' U2 R D' R2 
         x U R' U' L U R U' r' 
         R' U2 R' D' r U2 r' D R2 
-        R' U2 R' D' R U2 R' D R2 
+        R' U2 R' D' R U2 R' D R2
+	
+        R U2 R' U' R2 D R' U' R D' R2
+        R' U2 R U R2 D' R U R' D R2
+ 
         R U R' U' R B2 R' U2 R U2 R B2 R2
         R' U' R U R' F2 R U2 R' U2 R' F2 R2
         R U R' U' L' U2 R U2 R' U2 L
         F R U' R' U' R U2 R' U' F'
         R D' R U' R' D R U' R2 U R2 U R2
         R' D R' U R D' R' U R2 U' R2 U' R2
-        L U' L' U2 R L U' L' U' R' U' R U' R'
-        L' U L U2 R' L' U L U R U R' U R
+        
+        L U' R U R' L' U2 R U' R' U' R U' R'
+        L' U R' U' R L U2 R' U R U R' U R
+        R L U' R' U M x U R' U R U' R'
+        R' L' U R U' M' x' U' R U' R' U R
         
 
     # L Diagonals
@@ -111,7 +136,7 @@
 
 # Sune
     # Sune 2GLLs
-        R U R' U R' D' R r U2 r' U2 R2 D R2 
+        R U R' U' R U R' U R U R U2 R' U' R U' R' U R'
         R U R' U R U2 R' 
         R' U2 R U R' U R 
 
@@ -139,6 +164,15 @@
         x' R U2 R D2 R' U2 R D2 R2 x
         x R' U2 R' D2 R U2 R' D2 R2 x'
         F R U R' U' R U' R' U' R U R' F' 
+        R U2 R D R' U2 R D' R U' R U' R' U2 R 
+        R' U2 R' D' R U2 R' D R' U R' U R U2 R'
+        R U R D R' U' R D' R' U R' U R U2 R'
+        R' U' R' D' R U R' D R U' R U' R' U2 R
+        R U R' U B' U R U' R' U' B R U' R'
+        R' U' R U' F U' R' U R U F' R' U R
+        R U2 R2 U' R2 U' R' U2 R' U R L' U R' U' R L
+        x' M' U' R' U L' U' R U' R U R' U R
+        x M U R U' L U R' U R' U' R U' R'
 
     # T Adjacent Swap front corners
         R U' R' U2 L R U' R' U L'
@@ -161,16 +195,42 @@
         R2 F2 R U2 R U2 R' F2 R U' R' U R
         L' U2 R U2 R' U2 L U R U' R'
         F U R U2 R' U R U R' F'
-        R2 U' R2 U' R2 U R' D' R U R' D R' 
-        R2 U R2 U R2 U' R D R' U' R D' R 
-        R U R' U R U L U L' R' U2 L U L'
-        R' U' R U' R' U' L' U' L R U2 L' U' L
+
+        R U R' U R U R' U2 L R U' R' U L'
+        R' U' R U' R' U' R U2 L' R' U R U' L
+        R U R' U' R U' M' x' U' R U R' L'
+        R' U' R U R' U M x U R' U' R L
+        R2 U R2 U R2 U' R D R' U' R D' R
+        R2 U' R2 U' R2 U R' D' R U R' D R'
+        
+        R' L U' R U L' U' R' U' R U R' U R
+        R L' U R' U' L U R U R' U' R U' R'
+        R U2 R' U2 R U' R' U L' U R U' L U' R'
+        R' U2 R U2 R' U R U' L U' R' U L' U R
+        R2 U2 R' U R U' R U2 R U L' U R U' L
+        R2 U2 R U' R' U R' U2 R' U' L U' R' U L'
+        R' U R U R' U' R' D' R U2 R' D R U R
+        R U' R' U' R U R D R' U2 R D' R' U' R'
+        R' U2 R F U' R' U R U F' R' U R
+        R U2 R' B' U R U' R' U' B R U' R'
+        r' F2 r U2 r U' r' U' r' F r F
+        R U2 R' U2 R' F R U R U' R' F'
+        
 
     # T Diagonals
         R U' R2 D' r U2 r' D R2 U R' 
         R' U R2 D r' U2 r D' R2 U' R
         R' U' R U' R' U' R2 D r' U2 r D' R2 U' R
-        R U R' U R U R2 D' r U2 r' D R2 U R'
+        R U R' U R U R2 D' r U2 r' D R2 U R'        
+        R2 U R2 U R D' R U' R' D R U' R2
+        R2 U' R2 U' R' D R' U R D' R' U R2
+        R2 U R' D' R U R' D R' U' R2 U' R2
+        R2 U' R D R' U' R D' R U R2 U R2        
+        R' U D' R U2 R' D R' U' R U2 R' U' R2
+        R2 U R U2 R' U R D' R U2 R' D U' R        
+        L' U R U' L U' R D R' U' R D' R' U' R'
+        R U2 R' U' R U2 R2 D' U2 R U R' U D R2 U R'
+        
 
 # U
     # U 2GLLs
@@ -191,14 +251,26 @@
         F R U' R' U R U R' U R U' R' F' 
         x' R2 D2 R' U2 R D2 R' U2 R' x
         x R2 D2 R U2 R' D2 R U2 R x'
+        
         F2 R U' R' U' R U R' F' R U R' U' R' F R F2 
         R' F R U' R' U' R U R' F' R U R' U' R' F R F' R 
         R U' R' U R U' r B r' U B2 R B2 R2 
         R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R' U2 R 
+        L' R' U2 L U2 R U' L' U R' U R U' L
+        R U' r B r' U R' U' l U2 R U2 R2 x
+        r U R' U' r' F R U R' U' R F' R' U R
+        R' U' R F R' U R U' R' F' r U R U' r'
+        r U R' U' r' F R2 U' R' U' R U2 R' U' F'
+        R U2 R' U2 R' F R U R U2 R' U' R U2 R' U' F'
+        F U R U2 R' U R U R2 F' r U R U' r'
+        F U R U2 R' U R U2 R' U' R' F' R U2 R U2 R' 
+   
         R2 D R' U2 R D' R' U2 R' 
         R2 D' r U2 r' D R U2 R 
         R2 D r' U2 r D' R' U2 R' 
-         R2 D' R U2 R' D R U2 R 
+        R2 D' R U2 R' D R U2 R 
+        R2 D R' U R D' R2 U R U2 R'
+        R2 D' R U' R' D R2 U' R' U2 R
 
     # U Diagonals
         R U2 R' U' L' U2 R U R' U2 L 
