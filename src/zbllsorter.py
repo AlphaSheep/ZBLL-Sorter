@@ -31,6 +31,7 @@ import os
 import json
 import pylab
 
+from algreader import readKnownCases
 from casegenerator import getUniqueZBLLCases
 from htmlgenerator2 import generateHTML
 from imagegenerator import plot, save
@@ -131,6 +132,7 @@ def getProbablities(zblls):
 
     keys = list(zblls.keys())
     keys.sort()
+
     ocllProbs = {}
     collProbs = {}
     zbllProbs = {}
@@ -151,6 +153,7 @@ def getProbablities(zblls):
             collProbs[collName] = len(zblls[k])
         else:
             collProbs[collName] += len(zblls[k])
+
         if not zbllName in zbllProbs.keys():
             zbllProbs[zbllName] = len(zblls[k])
         else:
@@ -180,13 +183,14 @@ def main():
     
     print(' Number of unique cases found:',len(zblls))
 
-    ocllImg, collImg, zbllImg = getImages(sortedZBLLdict, generateImages=globalGenerateImages, generateSetImages=globalGenerateSetImages)    
-    ocllProbs, collProbs, zbllProbs = getProbablities(zblls) 
+    knownAlgs = readKnownCases()
 
-    
-    html = generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg)
-    
-    with open(savePath+"index.html", 'w') as outFile:
+    ocllImg, collImg, zbllImg = getImages(sortedZBLLdict, generateImages=globalGenerateImages, generateSetImages=globalGenerateSetImages)
+    ocllProbs, collProbs, zbllProbs = getProbablities(zblls)
+
+    html = generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg)
+
+    with open(savePath + "index.html", 'w') as outFile:
         outFile.write(html)
     dumpZbllJson(sortedZBLLdict)
 

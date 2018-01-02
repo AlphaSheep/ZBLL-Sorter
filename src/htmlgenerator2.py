@@ -21,19 +21,17 @@ Created on 06 Jan 2016
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-    
+
 '''
 
 from utilities import getList, probFractionString
-from algreader import readKnownCases
-
 from constants import *
 
 
-
-def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg):
+def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocllImg, collImg, zbllImg):
 
     css = """
+
     body {
         background-color: #000;
         text-align: center;
@@ -68,6 +66,7 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
         height: 190px;
         padding: 2px;
     }
+
     div.zbllalg {
         padding: 8px 2px;
         font-size: 8pt;
@@ -94,6 +93,7 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
     copyrightMsg = """
     Copyright &copy; 2015 Brendan Gray and Sylvermyst Technologies
     """
+
     i=0
     html = '<html>\n    <head>\n'
     html+= '        <link rel="stylesheet" type="text/css" href="css/'+cssFileName+'">\n'
@@ -104,8 +104,8 @@ def generateHTML(sortedZBLLdict, ocllProbs, collProbs, zbllProbs, ocllImg, collI
     y = 150
 
     oclls = getList(sortedZBLLdict)
-    algs = readKnownCases()
-    
+    algs = knownAlgs
+
     algcount = len(algs.keys())
     casecount = len(zbllProbs.keys())-1
 
