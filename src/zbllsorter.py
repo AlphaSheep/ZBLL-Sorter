@@ -28,6 +28,7 @@ Created on 03 Mar 2015
 '''
 
 import os
+import json
 import pylab
 
 from imagegenerator import plot, save
