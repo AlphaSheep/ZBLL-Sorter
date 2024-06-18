@@ -54,8 +54,8 @@ coverage.xml
 docs/_build/
 
 # Program specific settings
-images/
-index.html
-zblls.json
+#images/
+#index.html
+#zblls.json
 /src/uploadZBLLs.sh
-/stylesheet.css
+#/stylesheet.css
