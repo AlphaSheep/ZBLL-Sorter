@@ -24,6 +24,7 @@ Created on 06 Jan 2016
 
 '''
 
+from algtranslator import getBaseAlg
 from utilities import getList, probFractionString
 from constants import *
 
@@ -146,7 +147,7 @@ def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocl
                 html += '<div class="cube-image" data-case="'+zbll[0]+'"></div>'
 
                 if zbll[0] in algs.keys():
-                    html+='<br/><div class="zbllalg">'+algs[zbll[0]]+'</div>\n'
+                    html+='<br/><div class="zbllalg">'+getBaseAlg(algs[zbll[0]])+'</div>\n'
                 else:
                     html+='\n'
 
