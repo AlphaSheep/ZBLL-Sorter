@@ -95,7 +95,7 @@ def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocl
     """
 
     i=0
-    html = '<html>\n    <head>\n'
+    html = '<!DOCTYPE html>\n<html>\n    <head>\n'
     html+= '        <link rel="stylesheet" type="text/css" href="css/'+cssFileName+'">\n'
     html+= '        <link rel="stylesheet" type="text/css" href="css/cube.css">\n'
     html+= '    </head>\n    <body>\n'
