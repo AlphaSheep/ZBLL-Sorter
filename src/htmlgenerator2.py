@@ -162,7 +162,7 @@ def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocl
         y += 60
         x = 0
 
-    html+= '\n        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>\n'
+    html+= '\n        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>\n'
     html+= '\n        <script src="js/cube.js"></script>\n'
     html+= '\n\n        </div>\n    </body>\n</html>\n'
 
