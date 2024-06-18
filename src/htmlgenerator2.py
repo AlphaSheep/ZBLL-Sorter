@@ -56,7 +56,7 @@ def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocl
 
         color: #ddd;
         background: #444;
-        font-family: Verdana;
+        font-family: Verdana, Arial, sans-serif;
         font-size: 6pt;
         position: absolute;
         display: block;
@@ -152,7 +152,7 @@ def generateHTML(sortedZBLLdict, knownAlgs, ocllProbs, collProbs, zbllProbs, ocl
 
                 html+='    </div>\n'
 
-                css+='\n#CaseZBLL'+str(i)+' {\n    left: '+str(x)+';\n    top: '+str(y)+';\n}'
+                css+='\n#CaseZBLL'+str(i)+' {\n    left: '+str(x)+'px;\n    top: '+str(y)+'px;\n}'
                 x += 110
 
                 i+=1

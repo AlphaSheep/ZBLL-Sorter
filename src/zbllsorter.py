@@ -29,7 +29,6 @@ Created on 03 Mar 2015
 
 import os
 import json
-import pylab
 
 from algreader import readKnownCases
 from casegenerator import getUniqueZBLLCases
@@ -180,7 +179,7 @@ def main():
 
     zblls = getUniqueZBLLCases()
     sortedZBLLdict = sortCases(zblls)
-    
+
     print(' Number of unique cases found:',len(zblls))
 
     knownAlgs = readKnownCases()

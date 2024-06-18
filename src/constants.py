@@ -24,9 +24,9 @@ Created on 06 Jan 2016
 '''
 
 
-savePath = '../web/'
+savePath = './docs/'
 
-algFileName = '../algorithms2.txt'
+algFileName = './algorithms2.txt'
 
 
 globalGenerateImages = False
