@@ -21,39 +21,41 @@ Created on 07 Jan 2016
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-    
+
 '''
 
 from constants import *
-from algtranslator import checkAndSplitAlg, getZBLLcase, getInitialAUF, NotZBLLError, getBaseAlg, getZBLLCaseName
+from algtranslator import checkAndSplitAlg, getZBLLcase, \
+    getInitialAUF, NotZBLLError, getBaseAlg, getZBLLCaseName
 
 
 def getAlgs(algFileName):
     algs = []
     rawalgs = []
+    lineNumbers = []
     with open(algFileName) as algfile:
-        i = 0
+        lineNumber = 0
         for line in algfile:
-            i += 1
             rawalg = line.strip()
-            if not rawalg or rawalg[0] == '#': 
+            lineNumber += 1
+            if not rawalg or rawalg[0] == '#':
                 continue
-            ok, alg = checkAndSplitAlg(rawalg)        
+            ok, alg = checkAndSplitAlg(rawalg)
             if not ok:
-                print('ERROR on line '+str(i)+': '+alg+' in "'+rawalg+'"')                
+                print('ERROR on line '+str(lineNumber)+': '+alg+' in "'+rawalg+'"')
             else:
                 try:
                     case = getZBLLcase(alg)
                     auf = getInitialAUF(alg)
                     algs.append(alg)
                     rawalgs.append(auf + rawalg)
-                    print(auf + rawalg)
-                    
-                except NotZBLLError:                    
-                    print('ERROR on line '+str(i)+': "'+getBaseAlg(rawalg)+'" does not result in a ZBLL case.')                
-    return algs, rawalgs
-                   
-                    
+                    lineNumbers.append(lineNumber)
+
+                except NotZBLLError:
+                    print('ERROR on line '+str(lineNumber)+': "'+getBaseAlg(rawalg)+'" does not result in a ZBLL case.')
+    return algs, rawalgs, lineNumbers
+
+
 def getCases(algs):
     recogisedCases = []
     for alg in algs:
@@ -61,23 +63,23 @@ def getCases(algs):
             recogisedCases.append(getZBLLCaseName(getZBLLcase(alg)))
         except NotZBLLError:
             print(alg)
-        
-    return recogisedCases        
-    
+
+    return recogisedCases
+
 
 def readKnownCases():
-    algs, rawalgs = getAlgs(algFileName)
+    algs, rawalgs, lineNumbers = getAlgs(algFileName)
     print(len(algs), 'algorithms read\n')
     cases = getCases(algs)
-    
+
     algsDict = {}
     for i in range(len(cases)):
         if cases[i] in algsDict.keys():
             print('Duplicate: ', algsDict[cases[i]], ' --and--', rawalgs[i])
         algsDict[cases[i]] = rawalgs[i]
     return algsDict
-    
-    
+
+
 
 def main():
     algs = readKnownCases()
@@ -85,7 +87,7 @@ def main():
     for case in sorted(algs.keys()):
         count += 1
         print('{:.0f}.\t'.format(count), case, algs[case])
-        
+
 
 if __name__ == '__main__':
     main()

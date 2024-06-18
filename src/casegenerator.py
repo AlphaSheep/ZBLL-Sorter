@@ -20,7 +20,7 @@ Created on 06 Jan 2016
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-    
+
 '''
 
 from constants import *
@@ -30,8 +30,8 @@ def getOCLLcases():
     for ct1 in cornerTwistSet:
         for ct2 in cornerTwistSet:
             for ct3 in cornerTwistSet:
-                # Set last corner twist such that sum of corner twists is multiple of 3. 
-                ct4 = (6-ct1-ct2-ct3)%3 
+                # Set last corner twist such that sum of corner twists is multiple of 3.
+                ct4 = (6-ct1-ct2-ct3)%3
                 cases.append([ct1, ct2, ct3, ct4])
     return cases
 
@@ -62,10 +62,10 @@ def getEPLLCases():
                     continue
                 # The last edge must be the only remaining edge
                 ep4 = 6-ep1-ep2-ep3
-                cases.append([ep1, ep2, ep3, ep4])    
+                cases.append([ep1, ep2, ep3, ep4])
     return cases
-    
-    
+
+
 def calcParity(perm):
     # Count inversions
     # That is, the minimum number of swaps required to correctly permute the pieces
@@ -77,7 +77,7 @@ def calcParity(perm):
                 #p[i], p[j] = p[j], p[i]
                 inversions += 1
     return inversions
-                                
+
 
 def getZBLLCases():
     cases = []
@@ -101,29 +101,30 @@ def prerotateCase(case):
     for i in range(4,12):
         prerotated[i] = (prerotated[i]+1)%4
     return prerotated
-        
-        
-def strCase(case):    
+
+
+def strCase(case):
     s = ''
     for i in range(len(case)):
         s += str(case[i])
-    return s[:4]+' '+s[4:8]+' '+s[8:]  
-    
-    
+    return s[:4]+' '+s[4:8]+' '+s[8:]
+
+
 def getAllRotations(case):
-    # Each case has 16 possible rotations - 4 possible AUFs before the case times 4 possible AUFs after the case.
+    # Each case has 16 possible rotations:
+    # 4 possible AUFs before the case times 4 possible AUFs after the case.
     # These 16 will not be unique in many cases.
     cases = []
-    preRotation = case[:]        
+    preRotation = case[:]
     for _ in range (4):
         preRotation = prerotateCase(preRotation)
         postRotation = preRotation[:]
         for _ in range(4):
-            postRotation = rotateCase(postRotation)  
+            postRotation = rotateCase(postRotation)
             cases.append(postRotation)
     return cases
 
-        
+
 def getUniqueCases(cases):
     uniqueCases = {}
     for case in cases:
@@ -148,8 +149,8 @@ def getUniqueZBLLCases():
         zblls = getUniqueCases(zblls)
         getUniqueZBLLCases.zblls = zblls
         return zblls
-          
-     
+
+
 
 if __name__ == '__main__':
     pass
