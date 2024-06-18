@@ -36,6 +36,9 @@ from casegenerator import strCase, getUniqueZBLLCases, getAllRotations
 from utilities import getStringAfterSep
 from constants import ocllCaseNames, cpllCaseNames
 
+commentChars = '#'
+
+
 # Recognised move set:
 # U, U', U2, R, R', R2, F, F', F2, L, L', L2, B, B', B2, D, D', D2,
 # u, u', u2, r, r', r2, f, f', f2, l, l', l2, b, b', b2, d, d', d2,
@@ -142,13 +145,13 @@ def checkAndSplitAlg(alg):
 
 
 def getBaseAlg(alg):
-    strippedAlg = alg.strip().split('//')[0].strip() # Drop everything after a double slash (allow comments in algs)
+    strippedAlg = alg.strip().split(commentChars)[0].strip() # Drop everything after a double slash
     return strippedAlg
 
 
 def getComment(alg):
-    endPart = getStringAfterSep(alg, '//').strip()
-    comment = endPart.split('//')[0]
+    endPart = getStringAfterSep(alg, commentChars).strip()
+    comment = endPart.split(commentStart)[0]
     recog = getStringAfterSep(endPart, '::').strip()
     return comment.strip(), recog.strip()
 
@@ -223,15 +226,15 @@ def rotateToReferencePosition(case, ignoreY=False):
             case = applyAlg([movesDict["y2"]], case)
         elif case[4][4]==1:
             case = applyAlg([movesDict["y'"]], case)
-            
+
     return case
-    
-    
+
+
 def getZBLLcase(alg):
     zblls = getUniqueZBLLCases()
     case = rotateToReferencePosition(applyInverseAlg(alg))
     llcase = strCase(getLLCase(case))
-    
+
     for zbll in zblls.keys():
         if llcase in zblls[zbll]:
             return zbll
@@ -244,7 +247,7 @@ def getInitialAUF(alg):
     aufs = [r%4 for r in range(len(rotatedCases)) if rotatedCases[r] == basezbll]
     auf = ["(U') ", "(U2) ", "(U) ", ""][max(aufs)]
     return auf
-    
+
 
 def getZBLLCaseName(case):
     [ocll, cpll, epll] = case.split(' ')
